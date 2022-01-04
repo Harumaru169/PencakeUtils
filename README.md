@@ -17,6 +17,8 @@ $ pencakeparser story path_to_story_directory --pretty-printed
     ...
   ]
 }
+
+$ pencakeparser story path_to_story_directory -p >> story.json
 ```
 
 ### `PencakeParserCore`
