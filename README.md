@@ -39,6 +39,6 @@ Task {
 via SwiftPM
 ```swift
 dependencies: [
-    .package(url: "...", from: "0.0.1")
+    .package(url: "https://github.com/Harumaru169/PencakeParser", from: "0.1.0")
 ]
 ```
