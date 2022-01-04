@@ -1,0 +1,22 @@
+//
+//  PencakeCommand.swift
+//  pencake_parser
+//
+//  Created by k.haruyama on 2021/12/22.
+//  
+//
+
+import Foundation
+import ArgumentParser
+
+struct PencakeCommand: ParsableCommand {
+    static let configuration: CommandConfiguration = .init(
+        abstract: "Pencake Utilities.",
+        discussion: "",
+        version: "0.0.1",
+        shouldDisplay: true,
+        subcommands: [ArticleCommand.self, StoryCommand.self],
+        defaultSubcommand: StoryCommand.self,
+        helpNames: nil
+    )
+}
