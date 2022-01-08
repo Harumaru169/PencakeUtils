@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Article: Codable {
+public struct Article: Codable, Equatable {
     public var title: String
     
     public var editDate: Date
@@ -16,7 +16,7 @@ public struct Article: Codable {
     public var body: String
 }
 
-public struct Story: Codable {
+public struct Story: Codable, Equatable {
     public var title: String
     
     public var subtitle: String
