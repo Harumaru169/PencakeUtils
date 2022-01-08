@@ -12,7 +12,7 @@ import ArgumentParser
 
 extension PencakeCommand {
     
-    struct ArticleCommand: ParsableCommand {
+    struct ArticleCommand: AsyncParsableCommand {
         static let configuration: CommandConfiguration = .init(
             commandName: "article",
             abstract: "Parses a Pencake article and prints in JSON format."
@@ -35,7 +35,7 @@ extension PencakeCommand {
         )
         var isFormatPrettyPrinted = false
         
-        func run() async throws {
+        func runAsync() async throws {
             guard let data = FileManager.default.contents(atPath: path) else {
                 throw ArticleCommandError.readingDataFailed
             }
