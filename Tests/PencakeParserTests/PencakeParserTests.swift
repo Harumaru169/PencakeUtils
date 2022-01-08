@@ -1,5 +1,5 @@
 import XCTest
-@testable import PencakeParser
+@testable import pencakeparser
 
 final class PencakeParserTests: XCTestCase {
     func testExample() throws {
