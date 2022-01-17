@@ -22,7 +22,7 @@ struct StoryCommand: AsyncParsableCommand {
         completion: .directory,
         transform: { string in
             guard FileManager.default.fileExists(atPath: string) else {
-                throw StoryCommandError.directoryNotExists
+                throw ExecutionError.directoryDoesNotExist(path: string)
             }
             return URL(fileURLWithPath: string)
         })
@@ -34,7 +34,7 @@ struct StoryCommand: AsyncParsableCommand {
         completion: .list(Language.allCases.map(\.rawValue)),
         transform: { string in
             guard let result = Language(rawValue: string) else {
-                throw StoryCommandError.invalidLanguage
+                throw ExecutionError.invalidLanguage
             }
             return result
         })
@@ -63,15 +63,18 @@ struct StoryCommand: AsyncParsableCommand {
 }
 
 extension StoryCommand {
-    struct StoryCommandError: Error, CustomStringConvertible {
-        var description: String
+    enum ExecutionError: Error, CustomStringConvertible {
+        case directoryDoesNotExist(path: String)
         
-        init(_ description: String) {
-            self.description = description
+        case invalidLanguage
+        
+        var description: String {
+            switch self {
+                case .directoryDoesNotExist(path: let path):
+                    return "The file does not exist: \(path)"
+                case .invalidLanguage:
+                    return "Invalid language specification. Please use \(Language.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
+            }
         }
-        
-        static let directoryNotExists = Self.init("そんなディレクトリないよ。")
-        
-        static let invalidLanguage = Self.init("Invalid language specification. Please use \"english\" or \"japanese\".")
     }
 }
