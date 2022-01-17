@@ -55,6 +55,7 @@ struct StoryCommand: AsyncParsableCommand {
         if isFormatPrettyPrinted {
             jsonEncoder.outputFormatting = .prettyPrinted
         }
+        jsonEncoder.dateEncodingStrategy = .iso8601
         let jsonData = try jsonEncoder.encode(story)
         
         print(String(data: jsonData, encoding: .utf8) ?? "nil")

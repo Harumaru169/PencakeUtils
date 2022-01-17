@@ -58,6 +58,7 @@ extension PencakeCommand {
             if isFormatPrettyPrinted {
                 jsonEncoder.outputFormatting = .prettyPrinted
             }
+            jsonEncoder.dateEncodingStrategy = .iso8601
             let jsonData = try jsonEncoder.encode(article)
             
             print(String(data: jsonData, encoding: .utf8)!)
