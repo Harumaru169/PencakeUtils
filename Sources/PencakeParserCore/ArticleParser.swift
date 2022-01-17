@@ -14,23 +14,9 @@ public class ArticleParser {
     
     public static let shared: ArticleParser = .init()
     
-    private static let jaDateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "ja_JP")
-        df.dateFormat = "yyyy年MM月dd日(E) HH:mm"
-        return df
-    }()
-    
-    private static let enDateFormatter: DateFormatter = {
-       let df = DateFormatter()
-        df.locale = .init(identifier: "en_US")
-        df.dateFormat = "EEE, MMM dd, yyyy hh:mm a"
-        return df
-    }()
-    
     private static let regex: Regex = "(.*?)(\n{2}|(?:\r\n){2})(.*?)\\2([\\s\\S]*)".r!
     
-    public func parse(from data: Data) async throws -> Article {
+    public func parse(from data: Data, language: Language = .english) async throws -> Article {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ArticleParsingError.invalidTextCoding
         }
@@ -40,9 +26,8 @@ public class ArticleParser {
         }
         
         let editDateString = match.group(at: 3)!
-        guard let editDate =
-                Self.jaDateFormatter.date(from: editDateString) ??
-                Self.enDateFormatter.date(from: editDateString)
+        let dateFormatter = language.dateFormatterForArticle
+        guard let editDate = dateFormatter.date(from: editDateString)
         else {
             throw ArticleParsingError.invalidDateFormat(dateString: editDateString)
         }

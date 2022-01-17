@@ -27,7 +27,11 @@ public class StoryParser {
         groupNames: "lineBreak", "title", "subtitle", "createdAt", "exportedAt", "articleCount", "articles"
     )
     
-    func parse(storyInfoData: Data, articleDatas: [Data]) async throws -> Story {
+    func parse(
+        storyInfoData: Data,
+        articleDatas: [Data],
+        language: Language = .english
+    ) async throws -> Story {
         //MARK: analyzing story info data
         var (result, _) = try parseStoryInfo(from: storyInfoData)
         
@@ -56,7 +60,10 @@ public class StoryParser {
     
     
     
-    public func parse(directoryURL: URL) async throws -> Story {
+    public func parse(
+        directoryURL: URL,
+        language: Language = .english
+    ) async throws -> Story {
         let storyInfoFileURL = directoryURL
             .appendingPathComponent("Story")
             .appendingPathExtension("txt")
