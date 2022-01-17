@@ -28,6 +28,17 @@ struct StoryCommand: AsyncParsableCommand {
         })
     var directoryURL: URL
     
+    @Option(
+        name: [.short, .customLong("lang")],
+        help: "Language of the story. This will be used to parse dates.",
+        transform: { string in
+            guard let result = Language(rawValue: string) else {
+                throw StoryCommandError.invalidLanguage
+            }
+            return result
+        })
+    var language: Language = .english
+    
     @Flag(
         name: [.customLong("pretty-printed"), .customShort("p")],
         help: "Print the JSON contents in pretty printed style."
@@ -37,7 +48,7 @@ struct StoryCommand: AsyncParsableCommand {
     
     
     func runAsync() async throws {
-        let story = try await StoryParser.shared.parse(directoryURL: directoryURL)
+        let story = try await StoryParser.shared.parse(directoryURL: directoryURL, language: language)
         
         let jsonEncoder = JSONEncoder()
         if isFormatPrettyPrinted {
@@ -58,5 +69,7 @@ extension StoryCommand {
         }
         
         static let directoryNotExists = Self.init("そんなディレクトリないよ。")
+        
+        static let invalidLanguage = Self.init("Invalid language specification. Please use \"english\" or \"japanese\".")
     }
 }

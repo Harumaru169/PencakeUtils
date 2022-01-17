@@ -29,6 +29,17 @@ extension PencakeCommand {
             })
         var path: String
         
+        @Option(
+            name: [.short, .customLong("lang")],
+            help: "Language of the article. This will be used to parse dates.",
+            transform: { string in
+                guard let result = Language(rawValue: string) else {
+                    throw ArticleCommandError.invalidLanguage
+                }
+                return result
+            })
+        var language: Language = .english
+        
         @Flag(
             name: [.customLong("pretty-printed"), .customShort("p")],
             help: "Print the JSON contents in pretty printed style."
@@ -40,7 +51,7 @@ extension PencakeCommand {
                 throw ArticleCommandError.readingDataFailed
             }
             
-            let article = try await ArticleParser.shared.parse(from: data)
+            let article = try await ArticleParser.shared.parse(from: data, language: language)
             
             let jsonEncoder = JSONEncoder()
             if isFormatPrettyPrinted {
@@ -62,6 +73,8 @@ extension PencakeCommand {
         static let fileNotExists = Self.init("そんなファイルないよ。")
         
         static let readingDataFailed = Self.init("そんなもん読めへんわ。")
+        
+        static let invalidLanguage = Self.init("Invalid language specification. Please use \"english\" or \"japanese\".")
     }
 
 }
