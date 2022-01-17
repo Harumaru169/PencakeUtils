@@ -58,7 +58,7 @@ public class StoryInfoParser {
     
     public func parse(fileURL: URL) async throws -> (Story, articleCount: Int) {
         guard let data = FileManager.default.contents(atPath: fileURL.path) else {
-            throw ParseError.cannotReadFile
+            throw ParseError.failedToReadFile
         }
         
         return try await parse(from: data)
@@ -75,6 +75,6 @@ extension StoryInfoParser {
         
         case invalidNumberFormat
         
-        case cannotReadFile
+        case failedToReadFile
     }
 }
