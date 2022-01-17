@@ -14,18 +14,7 @@ public class StoryParser {
     
     public static let shared: StoryParser = .init()
     
-    private static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        return df
-    }()
-    
     private static let articleParser = ArticleParser.shared
-    
-    private static let regex = try! Regex(
-        pattern: "# Title(\n|\r\n)(.*)\\1{2}# Subtitle\\1(.*)\\1{2}# Created at\\1(.*)\\1{2}# Exported at\\1(.*)\\1{2}# Article count\\1([0-9]*)\\1{2}# Articles\\1([\\s\\S]*)\\1",
-        groupNames: "lineBreak", "title", "subtitle", "createdAt", "exportedAt", "articleCount", "articles"
-    )
     
     func parse(
         storyInfoData: Data,
@@ -33,7 +22,7 @@ public class StoryParser {
         language: Language = .english
     ) async throws -> Story {
         //MARK: analyzing story info data
-        var (result, _) = try parseStoryInfo(from: storyInfoData)
+        var (result, _) = try await StoryInfoParser.shared.parse(from: storyInfoData)
         
         //MARK: parsing articles data using ArticleParser
         do {
@@ -72,7 +61,7 @@ public class StoryParser {
             throw StoryParsingError("Story.txtファイル読むの失敗したね。")
         }
         
-        var (result, articleCount) = try parseStoryInfo(from: storyInfoData)
+        var (result, articleCount) = try await StoryInfoParser.shared.parse(from: storyInfoData)
         
         try await withThrowingTaskGroup(of: Article.self) { group in
             for index in 1...articleCount {
@@ -97,38 +86,6 @@ public class StoryParser {
         return result
     }
     
-    
-    
-    private func parseStoryInfo(from data: Data) throws -> (Story, articleCount: Int) {
-        guard let text = String(data: data, encoding: .utf8) else {
-            throw StoryParsingError.invalidTextCoding
-        }
-        
-        guard let match = Self.regex.findFirst(in: text) else {
-            throw StoryParsingError.dataCorrupted
-        }
-        
-        guard let createdDate = Self.dateFormatter.date(from: match.group(named: "createdAt")!),
-              let exportedDate = Self.dateFormatter.date(from: match.group(named: "exportedAt")!)
-        else {
-            throw StoryParsingError.invalidDateFormat
-        }
-        
-        guard let articleCount = Int(match.group(named: "articleCount")!) else {
-            throw StoryParsingError.invalidNumberFormat
-        }
-        
-        return (
-            Story(
-                title: match.group(named: "title")!,
-                subtitle: match.group(named: "subtitle")!,
-                createdDate: createdDate,
-                exportedDate: exportedDate,
-                articles: []
-            ),
-            articleCount: articleCount
-        )
-    }
 }
 
 extension StoryParser {
@@ -141,13 +98,5 @@ extension StoryParser {
             self.description = description
             self.underlyingError = underlyingError
         }
-        
-        static let invalidTextCoding = Self.init("テキストコーディングがだめね。")
-        
-        static let dataCorrupted = Self.init("中身が腐ってるね。")
-        
-        static let invalidDateFormat = Self.init("日時のフォーマットがなってないね。")
-        
-        static let invalidNumberFormat = Self.init("数字のフォーマットがなってないね")
     }
 }
