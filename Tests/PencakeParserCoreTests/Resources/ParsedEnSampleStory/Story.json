@@ -1,1 +1,23 @@
-{"exportedDate":663182074,"createdDate":663181477,"title":"Sample Story","subtitle":"Quotes from the greats.","articles":[{"title":"Sample Article No.2","body":"Genius is 1 percent inspiration and 99 percent perspiration.\r\n- Thomas Alva Edison","editDate":663181680},{"title":"Sample Article No.3","body":"The wisest mind has something yet to learn.\r\n- George Santayana","editDate":663181740},{"title":"Sample Article No.1","body":"Live as if you were to die tomorrow. Learn as if you were to live forever.\r\n- Mahatma Gandhi","editDate":663181620}]}
+{
+  "exportedDate" : "2022-01-06T17:14:34Z",
+  "createdDate" : "2022-01-06T17:04:37Z",
+  "title" : "Sample Story",
+  "subtitle" : "Quotes from the greats.",
+  "articles" : [
+    {
+      "title" : "Sample Article No.3",
+      "body" : "The wisest mind has something yet to learn.\r\n- George Santayana",
+      "editDate" : "2022-01-06T17:09:00Z"
+    },
+    {
+      "title" : "Sample Article No.1",
+      "body" : "Live as if you were to die tomorrow. Learn as if you were to live forever.\r\n- Mahatma Gandhi",
+      "editDate" : "2022-01-06T17:07:00Z"
+    },
+    {
+      "title" : "Sample Article No.2",
+      "body" : "Genius is 1 percent inspiration and 99 percent perspiration.\r\n- Thomas Alva Edison",
+      "editDate" : "2022-01-06T17:08:00Z"
+    }
+  ]
+}
