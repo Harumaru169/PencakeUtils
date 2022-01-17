@@ -23,7 +23,7 @@ extension PencakeCommand {
             completion: .file(extensions: ["txt"]),
             transform: { string in
                 guard FileManager.default.fileExists(atPath: string) else {
-                    throw ArticleCommandError.fileNotExists
+                    throw ExecutionError.fileNotExists
                 }
                 return string
             })
@@ -35,7 +35,7 @@ extension PencakeCommand {
             completion: .list(Language.allCases.map(\.rawValue)),
             transform: { string in
                 guard let result = Language(rawValue: string) else {
-                    throw ArticleCommandError.invalidLanguage
+                    throw ExecutionError.invalidLanguage
                 }
                 return result
             })
@@ -49,7 +49,7 @@ extension PencakeCommand {
         
         func runAsync() async throws {
             guard let data = FileManager.default.contents(atPath: path) else {
-                throw ArticleCommandError.readingDataFailed
+                throw ExecutionError.readingDataFailed
             }
             
             let article = try await ArticleParser.shared.parse(from: data, language: language)
@@ -64,20 +64,20 @@ extension PencakeCommand {
             print(String(data: jsonData, encoding: .utf8)!)
         }
     }
-    
-    struct ArticleCommandError: Error, CustomStringConvertible{
+}
+
+extension PencakeCommand.ArticleCommand {
+    struct ExecutionError: Error, CustomStringConvertible{
         var description: String
         
         init(_ description: String) {
             self.description = description
         }
         
-        static let fileNotExists = Self.init("そんなファイルないよ。")
+        static let fileNotExists = Self.init("The file does not exist.")
         
-        static let readingDataFailed = Self.init("そんなもん読めへんわ。")
+        static let readingDataFailed = Self.init("Failed to read the contents of the file.")
         
-        static let invalidLanguage = Self.init("Invalid language specification. Please use \"english\" or \"japanese\".")
+        static let invalidLanguage = Self.init("Invalid language specification. Please use \(Language.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX")))).")
     }
-
 }
-
