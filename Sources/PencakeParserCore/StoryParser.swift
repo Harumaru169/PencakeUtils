@@ -42,7 +42,7 @@ public class StoryParser {
                 
                 for articleData in articleDatas {
                     group.addTask {
-                        return try await Self.articleParser.parse(from: articleData)
+                        return try await Self.articleParser.parse(from: articleData, language: language)
                     }
                 }
                 
@@ -85,7 +85,7 @@ public class StoryParser {
                     guard let articleData = FileManager.default.contents(atPath: articleFileURL.path) else {
                         throw StoryParsingError("\(articleFileURL.lastPathComponent)読むのに失敗したね。")
                     }
-                    return try await Self.articleParser.parse(from: articleData)
+                    return try await Self.articleParser.parse(from: articleData, language: language)
                 }
             }
             
