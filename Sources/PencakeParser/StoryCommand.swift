@@ -31,6 +31,7 @@ struct StoryCommand: AsyncParsableCommand {
     @Option(
         name: [.short, .customLong("lang")],
         help: "Language of the story. This will be used to parse dates.",
+        completion: .list(Language.allCases.map(\.rawValue)),
         transform: { string in
             guard let result = Language(rawValue: string) else {
                 throw StoryCommandError.invalidLanguage

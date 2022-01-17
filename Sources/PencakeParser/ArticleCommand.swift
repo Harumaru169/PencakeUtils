@@ -32,6 +32,7 @@ extension PencakeCommand {
         @Option(
             name: [.short, .customLong("lang")],
             help: "Language of the article. This will be used to parse dates.",
+            completion: .list(Language.allCases.map(\.rawValue)),
             transform: { string in
                 guard let result = Language(rawValue: string) else {
                     throw ArticleCommandError.invalidLanguage
