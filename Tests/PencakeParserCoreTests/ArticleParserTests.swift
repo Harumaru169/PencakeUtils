@@ -18,7 +18,7 @@ class ArticleParserTests: XCTestCase {
         
         for (articleURL, testArticleURL) in zip(articleURLs, testArticleURLs) {
             let articleData = FileManager.default.contents(atPath: articleURL.path)!
-            let article = try await ArticleParser.shared.parse(from: articleData)
+            let article = try await ArticleParser.shared.parse(from: articleData, language: .english)
             
             let testArticleData = FileManager.default.contents(atPath: testArticleURL.path)!
             let testArticle = try JSONDecoder().decode(Article.self, from: testArticleData)
