@@ -18,18 +18,18 @@ public class ArticleParser {
     
     public func parse(from data: Data, language: Language = .english) async throws -> Article {
         guard let text = String(data: data, encoding: .utf8) else {
-            throw ArticleParsingError.invalidTextEncoding
+            throw ParseError.invalidTextEncoding
         }
         
         guard let match = Self.regex.findFirst(in: text) else {
-            throw ArticleParsingError.dataCorrupted
+            throw ParseError.dataCorrupted
         }
         
         let editDateString = match.group(at: 3)!
         let dateFormatter = language.dateFormatterForArticle
         guard let editDate = dateFormatter.date(from: editDateString)
         else {
-            throw ArticleParsingError.invalidDateFormat(dateString: editDateString)
+            throw ParseError.invalidDateFormat(dateString: editDateString)
         }
         
         return Article(
@@ -40,21 +40,23 @@ public class ArticleParser {
     }
 }
 
-public enum ArticleParsingError: Error, CustomStringConvertible {
-    case invalidTextEncoding
-    
-    case dataCorrupted
-    
-    case invalidDateFormat(dateString: String)
-    
-    public var description: String {
-        switch self {
-            case .invalidTextEncoding:
-                return "Invalid text encoding."
-            case .dataCorrupted:
-                return "The content does not follow the format."
-            case .invalidDateFormat(let dateString):
-                return "Invalid date format: \(dateString)"
+extension ArticleParser {
+    public enum ParseError: Error, CustomStringConvertible {
+        case invalidTextEncoding
+        
+        case dataCorrupted
+        
+        case invalidDateFormat(dateString: String)
+        
+        public var description: String {
+            switch self {
+                case .invalidTextEncoding:
+                    return "Invalid text encoding."
+                case .dataCorrupted:
+                    return "The content does not follow the format."
+                case .invalidDateFormat(let dateString):
+                    return "Invalid date format: \(dateString)"
+            }
         }
     }
 }
