@@ -40,8 +40,10 @@ public class StoryParser {
                 }
             }
             
+        } catch let error as ArticleParsingError {
+            throw ParseError.failedToParseArticle(error: error)
         } catch {
-            throw StoryParsingError("なんかダメだったぽいね。", underlyingError: error)
+            throw ParseError.unexpected(error: error)
         }
         
         return result
@@ -58,7 +60,7 @@ public class StoryParser {
             .appendingPathExtension("txt")
         
         guard let storyInfoData = FileManager.default.contents(atPath: storyInfoFileURL.path) else {
-            throw StoryParsingError("Story.txtファイル読むの失敗したね。")
+            throw ParseError.failedToReadFile(fileName: storyInfoFileURL.lastPathComponent)
         }
         
         var (result, articleCount) = try await StoryInfoParser.shared.parse(from: storyInfoData)
@@ -72,7 +74,7 @@ public class StoryParser {
                         .appendingPathComponent(articleFileName)
                         .appendingPathExtension("txt")
                     guard let articleData = FileManager.default.contents(atPath: articleFileURL.path) else {
-                        throw StoryParsingError("\(articleFileURL.lastPathComponent)読むのに失敗したね。")
+                        throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
                     }
                     return try await Self.articleParser.parse(from: articleData, language: language)
                 }
@@ -89,14 +91,23 @@ public class StoryParser {
 }
 
 extension StoryParser {
-    struct StoryParsingError: Error, CustomStringConvertible {
-        var description: String
+    public enum ParseError: Error, CustomStringConvertible {
         
-        var underlyingError: Error?
+        case failedToParseArticle(error: ArticleParsingError)
         
-        init(_ description: String, underlyingError: Error? = nil) {
-            self.description = description
-            self.underlyingError = underlyingError
+        case failedToReadFile(fileName: String)
+        
+        case unexpected(error: Error)
+        
+        public var description: String {
+            switch self {
+                case .failedToParseArticle(let error):
+                    return "Failed to parse article: \(error)"
+                case .failedToReadFile(let fileName):
+                    return "Failed to read \(fileName) file."
+                case .unexpected(let error):
+                    return "Unexpected error: \(error)"
+            }
         }
     }
 }
