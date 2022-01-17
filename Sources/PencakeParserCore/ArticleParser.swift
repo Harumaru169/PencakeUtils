@@ -18,7 +18,7 @@ public class ArticleParser {
     
     public func parse(from data: Data, language: Language = .english) async throws -> Article {
         guard let text = String(data: data, encoding: .utf8) else {
-            throw ArticleParsingError.invalidTextCoding
+            throw ArticleParsingError.invalidTextEncoding
         }
         
         guard let match = Self.regex.findFirst(in: text) else {
@@ -40,10 +40,21 @@ public class ArticleParser {
     }
 }
 
-enum ArticleParsingError: Error {
-    case invalidTextCoding
+public enum ArticleParsingError: Error, CustomStringConvertible {
+    case invalidTextEncoding
     
     case dataCorrupted
     
     case invalidDateFormat(dateString: String)
+    
+    public var description: String {
+        switch self {
+            case .invalidTextEncoding:
+                return "Invalid text encoding."
+            case .dataCorrupted:
+                return "The content does not follow the format."
+            case .invalidDateFormat(let dateString):
+                return "Invalid date format: \(dateString)"
+        }
+    }
 }
