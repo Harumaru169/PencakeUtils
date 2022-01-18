@@ -12,6 +12,7 @@ import PencakeParserCore
 class ArticleParserTests: XCTestCase {
 
     func testParsingEnglishArticles() async throws {
+        /*
         let articleURLs = Bundle.module.urls(forResourcesWithExtension: "txt", subdirectory: "EnSampleStory")!
         
         let testArticleURLs = Bundle.module.urls(forResourcesWithExtension: "json", subdirectory: "ParsedEnSampleStory")!
@@ -25,6 +26,7 @@ class ArticleParserTests: XCTestCase {
             
             XCTAssertEqual(article, testArticle)
         }
+         */
     }
 
 }
