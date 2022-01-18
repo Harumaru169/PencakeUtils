@@ -9,14 +9,12 @@
 import Foundation
 import Regex
 
-public class ArticleParser {
-    private init() {}
-    
-    public static let shared: ArticleParser = .init()
+public class ArticleParser: ArticleParserProtocol {
+    public init() {}
     
     private static let regex: Regex = "(.*?)(\n{2}|(?:\r\n){2})(.*?)\\2([\\s\\S]*)".r!
     
-    public func parse(from data: Data, language: Language = .english) async throws -> Article {
+    public func parse(from data: Data, language: Language) async throws -> Article {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ParseError.invalidTextEncoding
         }
@@ -38,6 +36,14 @@ public class ArticleParser {
             body: match.group(at: 4)!
         )
     }
+    
+    public func parse(fileURL: URL, language: Language) async throws -> Article {
+        guard let data = FileManager.default.contents(atPath: fileURL.path) else {
+            throw ParseError.failedToReadFile(fileName: fileURL.lastPathComponent)
+        }
+        
+        return try await parse(from: data, language: language)
+    }
 }
 
 extension ArticleParser {
@@ -48,6 +54,8 @@ extension ArticleParser {
         
         case invalidDateFormat(dateString: String)
         
+        case failedToReadFile(fileName: String)
+        
         public var description: String {
             switch self {
                 case .invalidTextEncoding:
@@ -56,6 +64,8 @@ extension ArticleParser {
                     return "The content does not follow the format."
                 case .invalidDateFormat(let dateString):
                     return "Invalid date format: \(dateString)"
+                case .failedToReadFile(let fileName):
+                    return "Failed to read \(fileName) file."
             }
         }
     }
