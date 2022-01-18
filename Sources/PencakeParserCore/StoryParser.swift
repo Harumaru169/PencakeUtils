@@ -7,22 +7,23 @@
 //
 
 import Foundation
-import Regex
 
-public class StoryParser {
-    private init() {}
+public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoParserType: StoryInfoParserProtocol>: StoryParserProtocol {
+    private let articleParser: ArticleParserType
+    private let storyInfoParser: StoryInfoParserType
     
-    public static let shared: StoryParser = .init()
+    public init(articleParser: ArticleParserType, storyInfoParser: StoryInfoParserType) {
+        self.articleParser = articleParser
+        self.storyInfoParser = storyInfoParser
+    }
     
-    private static let articleParser = ArticleParser.shared
-    
-    func parse(
+    public func parse(
         storyInfoData: Data,
         articleDatas: [Data],
         language: Language = .english
     ) async throws -> Story {
         //MARK: analyzing story info data
-        var (result, _) = try await StoryInfoParser.shared.parse(from: storyInfoData)
+        var (result, _) = try await storyInfoParser.parse(from: storyInfoData)
         
         //MARK: parsing articles data using ArticleParser
         do {
@@ -31,7 +32,7 @@ public class StoryParser {
                 
                 for articleData in articleDatas {
                     group.addTask {
-                        return try await Self.articleParser.parse(from: articleData, language: language)
+                        return try await self.articleParser.parse(from: articleData, language: language)
                     }
                 }
                 
@@ -63,7 +64,7 @@ public class StoryParser {
             throw ParseError.failedToReadFile(fileName: storyInfoFileURL.lastPathComponent)
         }
         
-        var (result, articleCount) = try await StoryInfoParser.shared.parse(from: storyInfoData)
+        var (result, articleCount) = try await storyInfoParser.parse(from: storyInfoData)
         
         do {
             try await withThrowingTaskGroup(of: Article.self) { group in
@@ -77,7 +78,7 @@ public class StoryParser {
                         guard let articleData = FileManager.default.contents(atPath: articleFileURL.path) else {
                             throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
                         }
-                        return try await Self.articleParser.parse(from: articleData, language: language)
+                        return try await self.articleParser.parse(from: articleData, language: language)
                     }
                 }
                 
