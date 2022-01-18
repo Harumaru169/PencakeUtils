@@ -52,7 +52,7 @@ extension PencakeCommand {
                 throw ExecutionError.failedToReadData
             }
             
-            let article = try await ArticleParser.shared.parse(from: data, language: language)
+            let article = try await ArticleParser().parse(from: data, language: language)
             
             let jsonEncoder = JSONEncoder()
             if isFormatPrettyPrinted {

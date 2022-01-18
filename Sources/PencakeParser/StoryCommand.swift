@@ -49,7 +49,7 @@ struct StoryCommand: AsyncParsableCommand {
     
     
     func runAsync() async throws {
-        let story = try await StoryParser.shared.parse(directoryURL: directoryURL, language: language)
+        let story = try await StoryParser(articleParser: ArticleParser(), storyInfoParser: StoryInfoParser()).parse(directoryURL: directoryURL, language: language)
         
         let jsonEncoder = JSONEncoder()
         if isFormatPrettyPrinted {
