@@ -22,29 +22,28 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
         articleDatas: [Data],
         language: Language = .english
     ) async throws -> Story {
-        //MARK: analyzing story info data
-        var (result, _) = try await storyInfoParser.parse(from: storyInfoData)
+        var result: Story
         
-        //MARK: parsing articles data using ArticleParser
         do {
-            
-            try await withThrowingTaskGroup(of: Article.self) { group in
-                
-                for articleData in articleDatas {
-                    group.addTask {
+            (result, _) = try await storyInfoParser.parse(from: storyInfoData)
+        } catch {
+            throw ParseError.failedToParseStoryInfo(error: error)
+        }
+        
+        try await withThrowingTaskGroup(of: Article.self) { group in
+            for articleData in articleDatas {
+                group.addTask {
+                    do {
                         return try await self.articleParser.parse(from: articleData, language: language)
+                    } catch {
+                        throw ParseError.failedToParseArticle(fileName: nil, error: error)
                     }
-                }
-                
-                for try await article in group {
-                    result.articles.append(article)
                 }
             }
             
-        } catch let error as ArticleParser.ParseError {
-            throw ParseError.failedToParseArticle(error: error)
-        } catch {
-            throw ParseError.unexpected(error: error)
+            for try await article in group {
+                result.articles.append(article)
+            }
         }
         
         return result
@@ -64,32 +63,36 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
             throw ParseError.failedToReadFile(fileName: storyInfoFileURL.lastPathComponent)
         }
         
-        var (result, articleCount) = try await storyInfoParser.parse(from: storyInfoData)
+        var (result, articleCount): (Story, Int)
         
         do {
-            try await withThrowingTaskGroup(of: Article.self) { group in
-                for index in 1...articleCount {
-                    _ = group.addTaskUnlessCancelled {
-                        let articleFileName = "Article_" + String(format: "%03d", index)
-                        let articleFileURL = directoryURL
-                            .appendingPathComponent("Text")
-                            .appendingPathComponent(articleFileName)
-                            .appendingPathExtension("txt")
-                        guard let articleData = FileManager.default.contents(atPath: articleFileURL.path) else {
-                            throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
-                        }
+            (result, articleCount) = try await storyInfoParser.parse(from: storyInfoData)
+        } catch {
+            throw ParseError.failedToParseStoryInfo(error: error)
+        }
+        
+        try await withThrowingTaskGroup(of: Article.self) { group in
+            for index in 1...articleCount {
+                _ = group.addTaskUnlessCancelled {
+                    let articleFileName = "Article_" + String(format: "%03d", index)
+                    let articleFileURL = directoryURL
+                        .appendingPathComponent("Text")
+                        .appendingPathComponent(articleFileName)
+                        .appendingPathExtension("txt")
+                    guard let articleData = FileManager.default.contents(atPath: articleFileURL.path) else {
+                        throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
+                    }
+                    do {
                         return try await self.articleParser.parse(from: articleData, language: language)
+                    } catch {
+                        throw ParseError.failedToParseArticle(fileName: articleFileURL.lastPathComponent, error: error)
                     }
                 }
-                
-                for try await article in group {
-                    result.articles.append(article)
-                }
             }
-        } catch let error as ArticleParser.ParseError {
-            throw ParseError.failedToParseArticle(error: error)
-        } catch {
-            throw ParseError.unexpected(error: error)
+            
+            for try await article in group {
+                result.articles.append(article)
+            }
         }
         
         return result
@@ -99,8 +102,9 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
 
 extension StoryParser {
     public enum ParseError: Error, CustomStringConvertible {
+        case failedToParseStoryInfo(error: Error)
         
-        case failedToParseArticle(error: ArticleParser.ParseError)
+        case failedToParseArticle(fileName: String?, error: Error)
         
         case failedToReadFile(fileName: String)
         
@@ -108,8 +112,14 @@ extension StoryParser {
         
         public var description: String {
             switch self {
-                case .failedToParseArticle(let error):
-                    return "Failed to parse article: \(error)"
+                case .failedToParseStoryInfo(let error):
+                    return "Failed to parse story info: \(error)"
+                case .failedToParseArticle(let fileName, let error):
+                    if let fileName = fileName {
+                        return "Failed to parse \(fileName): \(error)"
+                    } else {
+                        return "Failed to parse article: \(error)"
+                    }
                 case .failedToReadFile(let fileName):
                     return "Failed to read \(fileName) file."
                 case .unexpected(let error):
