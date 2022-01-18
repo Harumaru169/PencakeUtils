@@ -9,10 +9,8 @@
 import Foundation
 import Regex
 
-public class StoryInfoParser {
-    private init() {}
-    
-    public static let shared: StoryInfoParser = .init()
+public class StoryInfoParser: StoryInfoParserProtocol {
+    public init() {}
     
     private static let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -34,14 +32,20 @@ public class StoryInfoParser {
             throw ParseError.dataCorrupted
         }
         
-        guard let createdDate = Self.dateFormatter.date(from: match.group(named: "createdAt")!),
-              let exportedDate = Self.dateFormatter.date(from: match.group(named: "exportedAt")!)
-        else {
-            throw ParseError.invalidDateFormat
+        let createdDateString = match.group(named: "createdAt")!
+        guard let createdDate = Self.dateFormatter.date(from: createdDateString) else {
+            throw ParseError.invalidDateFormat(dateString: createdDateString)
         }
         
-        guard let articleCount = Int(match.group(named: "articleCount")!) else {
-            throw ParseError.invalidNumberFormat
+        let exportedDateString = match.group(named: "exportedAt")!
+        guard let exportedDate = Self.dateFormatter.date(from: exportedDateString) else {
+            throw ParseError.invalidDateFormat(dateString: exportedDateString)
+        }
+        
+        
+        let articleCountString = match.group(named: "articleCount")!
+        guard let articleCount = Int(articleCountString) else {
+            throw ParseError.invalidNumberFormat(numberString: articleCountString)
         }
         
         return (
@@ -58,23 +62,39 @@ public class StoryInfoParser {
     
     public func parse(fileURL: URL) async throws -> (Story, articleCount: Int) {
         guard let data = FileManager.default.contents(atPath: fileURL.path) else {
-            throw ParseError.failedToReadFile
+            throw ParseError.failedToReadFile(fileName: fileURL.lastPathComponent)
         }
         
         return try await parse(from: data)
     }
 }
 
+//TODO: CustomStringConvertible
 extension StoryInfoParser {
-    public enum ParseError: Error {
+    public enum ParseError: Error, CustomStringConvertible {
         case invalidTextEncoding
         
         case dataCorrupted
         
-        case invalidDateFormat
+        case invalidDateFormat(dateString: String)
         
-        case invalidNumberFormat
+        case invalidNumberFormat(numberString: String)
         
-        case failedToReadFile
+        case failedToReadFile(fileName: String)
+        
+        public var description: String {
+            switch self {
+                case .invalidTextEncoding:
+                    return "Invalid text encoding."
+                case .dataCorrupted:
+                    return "The content does not follow the format."
+                case .invalidDateFormat(let dateString):
+                    return "Invalid date format: \(dateString)"
+                case .invalidNumberFormat(let numberString):
+                    return "Invalid number format: \(numberString)"
+                case .failedToReadFile(let fileName):
+                    return "Failed to read \(fileName) file."
+            }
+        }
     }
 }
