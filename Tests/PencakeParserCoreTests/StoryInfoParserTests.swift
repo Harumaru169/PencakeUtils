@@ -58,13 +58,3 @@ extension StoryInfoParserTests {
         articleCount: 3
     )
 }
-
-extension StoryInfoParserTests {
-    struct PreparationError: Error, CustomStringConvertible {
-        var description: String
-        
-        init(_ description: String) {
-            self.description = description
-        }
-    }
-}

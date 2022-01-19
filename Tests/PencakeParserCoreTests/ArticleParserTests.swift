@@ -117,13 +117,3 @@ extension ArticleParserTests {
         .init(title: "サンプル記事 No.3", editDate: try! .init("2022-01-19T07:30:00Z", strategy: .iso8601), body: "最も賢明な精神は、まだ学ぶべきことがある。\n- ジョージ・サンタヤーナ")
     ]
 }
-
-extension ArticleParserTests {
-    struct PreparationError: Error, CustomStringConvertible {
-        var description: String
-        
-        init(_ description: String) {
-            self.description = description
-        }
-    }
-}
