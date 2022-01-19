@@ -14,6 +14,12 @@ public struct Article: Codable, Equatable {
     public var editDate: Date
     
     public var body: String
+    
+    public init(title: String, editDate: Date, body: String) {
+        self.title = title
+        self.editDate = editDate
+        self.body = body
+    }
 }
 
 public struct Story: Codable, Equatable {
@@ -26,4 +32,12 @@ public struct Story: Codable, Equatable {
     public var exportedDate: Date
     
     public var articles: [Article]
+    
+    public init(title: String, subtitle: String, createdDate: Date, exportedDate: Date, articles: [Article]) {
+        self.title = title
+        self.subtitle = subtitle
+        self.createdDate = createdDate
+        self.exportedDate = exportedDate
+        self.articles = articles
+    }
 }
