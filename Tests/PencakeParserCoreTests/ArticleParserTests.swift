@@ -34,10 +34,7 @@ class ArticleParserTests: XCTestCase {
             let fileURL = directoryURL!.appendingPathComponent("Article_\(UUID().uuidString).txt", isDirectory: false)
             let writingResult = FileManager.default.createFile(atPath: fileURL.path, contents: articleString.data(using: .utf8)!)
             
-            guard writingResult == true else {
-                XCTFail("Failed to write a file to the disk.")
-                return
-            }
+            XCTAssertTrue(writingResult, "Failed to write a file to the disk.")
             
             let article = try await articleParser.parse(fileURL: fileURL, language: .english)
             XCTAssertEqual(article, testArticle)
