@@ -13,9 +13,9 @@ class ArticleParserTests: XCTestCase {
     var directoryURL: URL?
     
     override func setUp() async throws {
-        directoryURL = FileManager.default.temporaryDirectory.appendingPathComponent("ArticleParserTests", isDirectory: true)
-        guard FileManager.default.fileExists(atPath: directoryURL!.path) == false else {
-            throw PreparationError("The directory generated in the previous test is still on the disk.")
+        directoryURL = FileManager.default.temporaryDirectory.appendingPathComponent("PencakeParser.ArticleParserTests", isDirectory: true)
+        if FileManager.default.fileExists(atPath: directoryURL!.path) {
+            try FileManager.default.removeItem(at: directoryURL!)
         }
         try FileManager.default.createDirectory(atPath: directoryURL!.path, withIntermediateDirectories: true)
     }
