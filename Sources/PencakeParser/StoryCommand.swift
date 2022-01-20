@@ -29,7 +29,7 @@ struct StoryCommand: AsyncParsableCommand {
     var directoryURL: URL
     
     @Option(
-        name: [.short, .customLong("lang")],
+        name: [.customLong("language"), .customShort("l")],
         help: "Language of the story. This will be used to parse dates.",
         completion: .list(Language.allCases.map(\.rawValue)),
         transform: { string in
