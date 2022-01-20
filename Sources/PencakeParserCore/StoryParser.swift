@@ -20,7 +20,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
     public func parse(
         storyInfoData: Data,
         articleDatas: [Data],
-        language: Language = .english
+        language: Language
     ) async throws -> Story {
         var result: Story
         
@@ -53,7 +53,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
     
     public func parse(
         directoryURL: URL,
-        language: Language = .english
+        language: Language
     ) async throws -> Story {
         let storyInfoFileURL = directoryURL
             .appendingPathComponent("Story")
