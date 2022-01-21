@@ -14,7 +14,7 @@ struct StoryCommand: AsyncParsableCommand {
     
     static let configuration = CommandConfiguration(
         commandName: "story",
-        abstract: "Parses a Pencake article and prints in JSON format."
+        abstract: "Parses a Pencake story and prints in JSON format."
     )
     
     @Argument(
@@ -71,7 +71,7 @@ extension StoryCommand {
         var description: String {
             switch self {
                 case .directoryDoesNotExist(path: let path):
-                    return "The file does not exist: \(path)"
+                    return "The directory does not exist: \(path)"
                 case .invalidLanguage:
                     return "Invalid language specification. Please use \(Language.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
             }
