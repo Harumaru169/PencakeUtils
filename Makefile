@@ -14,3 +14,6 @@ install: build
 
 uninstall:
 	rm -f $(INSTALL_PATH)
+
+archive: build
+	./Scripts/archive.swift $(EXECUTABLE_PATH)
