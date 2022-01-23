@@ -47,10 +47,17 @@ print(String(data: jsonData, encoding: .utf8) ?? "nil")
 ## Installation
 
 ### `pencakeparser` Command
-In preparation. Currently only possible by building on your own machine.
+- From 'Releases', download the zip file and run:
+```shell
+$ chmod +x install.sh
+$ ./install.sh
+```
+The script will copy the binary to`/usr/local/bin`.
+
+- To build and install from source code, run `make install` in the project directory.
 
 ### `PencakeParserCore` Library
-via SwiftPM
+via SwiftPM:
 ```swift
 dependencies: [
     .package(url: "https://github.com/Harumaru169/PencakeParser", from: "0.1.0")
