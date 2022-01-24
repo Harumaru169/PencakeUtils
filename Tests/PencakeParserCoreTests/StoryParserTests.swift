@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import PencakeParserCore
+@testable import PencakeParserCore
 
 class StoryParserTests: XCTestCase {
     var directoryURL: URL?
