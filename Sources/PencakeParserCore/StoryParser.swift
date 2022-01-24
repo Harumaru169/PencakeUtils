@@ -12,7 +12,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
     private let articleParser: ArticleParserType
     private let storyInfoParser: StoryInfoParserType
     
-    public init(articleParser: ArticleParserType, storyInfoParser: StoryInfoParserType) {
+    init(articleParser: ArticleParserType, storyInfoParser: StoryInfoParserType) {
         self.articleParser = articleParser
         self.storyInfoParser = storyInfoParser
     }
@@ -126,5 +126,11 @@ extension StoryParser {
                     return "Unexpected error: \(error)"
             }
         }
+    }
+}
+
+extension StoryParser where ArticleParserType == ArticleParser, StoryInfoParserType == StoryInfoParser {
+    public convenience init() {
+        self.init(articleParser: .init(), storyInfoParser: .init())
     }
 }
