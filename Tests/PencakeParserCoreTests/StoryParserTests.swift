@@ -62,11 +62,11 @@ extension StoryParserTests {
     }
     
     class ArticleParserMock: ArticleParserProtocol {
-        func parse(from: Data, language: Language) async throws -> Article {
+        func parse(from: Data, options: ParseOptions) async throws -> Article {
             return Constants.article
         }
         
-        func parse(fileURL: URL, language: Language) async throws -> Article {
+        func parse(fileURL: URL, options: ParseOptions) async throws -> Article {
             return Constants.article
         }
     }

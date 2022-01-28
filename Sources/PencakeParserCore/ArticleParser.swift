@@ -14,7 +14,7 @@ public class ArticleParser: ArticleParserProtocol {
     
     private static let regex: Regex = "(.*?)(\n{2}|(?:\r\n){2})(.*?)\\2([\\s\\S]*)".r!
     
-    public func parse(from data: Data, language: Language) async throws -> Article {
+    public func parse(from data: Data, options: ParseOptions) async throws -> Article {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ParseError.invalidTextEncoding
         }
@@ -24,7 +24,7 @@ public class ArticleParser: ArticleParserProtocol {
         }
         
         let editDateString = match.group(at: 3)!
-        let dateFormatter = language.dateFormatterForArticle
+        let dateFormatter = options.language.dateFormatterForArticle
         guard let editDate = dateFormatter.date(from: editDateString)
         else {
             throw ParseError.invalidDateFormat(dateString: editDateString)
@@ -37,12 +37,12 @@ public class ArticleParser: ArticleParserProtocol {
         )
     }
     
-    public func parse(fileURL: URL, language: Language) async throws -> Article {
+    public func parse(fileURL: URL, options: ParseOptions) async throws -> Article {
         guard let data = FileManager.default.contents(atPath: fileURL.path) else {
             throw ParseError.failedToReadFile(fileName: fileURL.lastPathComponent)
         }
         
-        return try await parse(from: data, language: language)
+        return try await parse(from: data, language: options.language)
     }
 }
 

@@ -17,11 +17,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
         self.storyInfoParser = storyInfoParser
     }
     
-    public func parse(
-        storyInfoData: Data,
-        articleDatas: [Data],
-        language: Language
-    ) async throws -> Story {
+    public func parse(storyInfoData: Data, articleDatas: [Data], options: ParseOptions) async throws -> Story {
         var result: Story
         
         do {
@@ -34,7 +30,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
             for articleData in articleDatas {
                 group.addTask {
                     do {
-                        return try await self.articleParser.parse(from: articleData, language: language)
+                        return try await self.articleParser.parse(from: articleData, language: options.language)
                     } catch {
                         throw ParseError.failedToParseArticle(fileName: nil, error: error)
                     }
@@ -51,10 +47,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
     
     
     
-    public func parse(
-        directoryURL: URL,
-        language: Language
-    ) async throws -> Story {
+    public func parse(directoryURL: URL, options: ParseOptions) async throws -> Story {
         let storyInfoFileURL = directoryURL
             .appendingPathComponent("Story")
             .appendingPathExtension("txt")
@@ -83,7 +76,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
                         throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
                     }
                     do {
-                        return try await self.articleParser.parse(from: articleData, language: language)
+                        return try await self.articleParser.parse(from: articleData, language: options.language)
                     } catch {
                         throw ParseError.failedToParseArticle(fileName: articleFileURL.lastPathComponent, error: error)
                     }
