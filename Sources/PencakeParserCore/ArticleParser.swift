@@ -9,12 +9,12 @@
 import Foundation
 import Regex
 
-public class ArticleParser<NewlineCharacterReplacerType: NewlineCharacterReplacerProtocol>: ArticleParserProtocol {
+public class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: ArticleParserProtocol {
     
-    private let newlineCharacterReplacer: NewlineCharacterReplacerType
+    private let newlineReplacer: NewlineReplacerType
     
-    init(newlineCharacterReplacer: NewlineCharacterReplacerType) {
-        self.newlineCharacterReplacer = newlineCharacterReplacer
+    init(newlineReplacer: NewlineReplacerType) {
+        self.newlineReplacer = newlineReplacer
     }
     
     private static var regex: Regex {
@@ -33,8 +33,8 @@ public class ArticleParser<NewlineCharacterReplacerType: NewlineCharacterReplace
         let title = match.group(at: 1)!
         
         let body: String
-        if let newlineCharacter = options.newlineCharacter {
-            body = newlineCharacterReplacer.replacingAll(in: match.group(at: 4)!, with: newlineCharacter)
+        if let newline = options.newline {
+            body = newlineReplacer.replacingAll(in: match.group(at: 4)!, with: newline)
         } else {
             body = match.group(at: 4)!
         }
@@ -83,8 +83,8 @@ extension ArticleParser {
     }
 }
 
-extension ArticleParser where NewlineCharacterReplacerType == NewlineCharacterReplacer {
+extension ArticleParser where NewlineReplacerType == NewlineReplacer {
     public convenience init() {
-        self.init(newlineCharacterReplacer: .init())
+        self.init(newlineReplacer: .init())
     }
 }

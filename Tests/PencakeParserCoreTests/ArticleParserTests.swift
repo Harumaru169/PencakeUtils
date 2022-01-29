@@ -29,7 +29,7 @@ class ArticleParserTests: XCTestCase {
         XCTAssertFalse(Self.englishArticleStrings.isEmpty)
         
         for (articleString, testArticle) in zip(Self.englishArticleStrings, Self.englishTestArticles) {
-            let articleParser = ArticleParser(newlineCharacterReplacer: NewlineCharacterReplacerMock())
+            let articleParser = ArticleParser(newlineReplacer: NewlineReplacerMock())
             
             let fileURL = directoryURL!.appendingPathComponent("Article_\(UUID().uuidString).txt", isDirectory: false)
             let writingResult = FileManager.default.createFile(atPath: fileURL.path, contents: articleString.data(using: .utf8)!)
@@ -46,7 +46,7 @@ class ArticleParserTests: XCTestCase {
         XCTAssertFalse(Self.englishArticleStrings.isEmpty)
         
         for (articleString, testArticle) in zip(Self.englishArticleStrings, Self.englishTestArticles) {
-            let articleParser = ArticleParser(newlineCharacterReplacer: NewlineCharacterReplacerMock())
+            let articleParser = ArticleParser(newlineReplacer: NewlineReplacerMock())
             
             let articleData = articleString.data(using: .utf8)!
             
@@ -61,7 +61,7 @@ class ArticleParserTests: XCTestCase {
         XCTAssertFalse(Self.japaneseArticleStrings.isEmpty)
         
         for (articleString, testArticle) in zip(Self.japaneseArticleStrings, Self.japaneseTestArticles) {
-            let articleParser = ArticleParser(newlineCharacterReplacer: NewlineCharacterReplacerMock())
+            let articleParser = ArticleParser(newlineReplacer: NewlineReplacerMock())
             
             let fileURL = directoryURL!.appendingPathComponent("Article_\(UUID().uuidString).txt", isDirectory: false)
             let writingResult = FileManager.default.createFile(atPath: fileURL.path, contents: articleString.data(using: .utf8)!)
@@ -81,7 +81,7 @@ class ArticleParserTests: XCTestCase {
         XCTAssertFalse(Self.japaneseArticleStrings.isEmpty)
         
         for (articleString, testArticle) in zip(Self.japaneseArticleStrings, Self.japaneseTestArticles) {
-            let articleParser = ArticleParser(newlineCharacterReplacer: NewlineCharacterReplacerMock())
+            let articleParser = ArticleParser(newlineReplacer: NewlineReplacerMock())
             
             let articleData = articleString.data(using: .utf8)!
             
@@ -93,12 +93,12 @@ class ArticleParserTests: XCTestCase {
 }
 
 extension ArticleParserTests {
-    class NewlineCharacterReplacerMock: NewlineCharacterReplacerProtocol {
-        func replaceAll(in: inout String, with: NewlineCharacter) {
+    class NewlineReplacerMock: NewlineReplacerProtocol {
+        func replaceAll(in: inout String, with: Newline) {
             return
         }
         
-        func replacingAll(in originalString: String, with: NewlineCharacter) -> String {
+        func replacingAll(in originalString: String, with: Newline) -> String {
             return originalString
         }
     }

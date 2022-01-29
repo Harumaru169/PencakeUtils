@@ -1,5 +1,5 @@
 //
-//  NewlineCharacter.swift
+//  Newline.swift
 //  
 //
 //  Created by k.haruyama on 2022/01/24.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-public enum NewlineCharacter: String, RawRepresentable, CaseIterable, Codable {
+public enum Newline: String, RawRepresentable, CaseIterable, Codable {
     case cr
     case lf
     case crlf
 }
 
-extension NewlineCharacter {
+extension Newline {
     public var rawString: String {
         switch self {
             case .cr:

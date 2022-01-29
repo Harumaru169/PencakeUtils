@@ -122,7 +122,7 @@ extension StoryParser {
     }
 }
 
-extension StoryParser where ArticleParserType == ArticleParser<NewlineCharacterReplacer>, StoryInfoParserType == StoryInfoParser {
+extension StoryParser where ArticleParserType == ArticleParser<NewlineReplacer>, StoryInfoParserType == StoryInfoParser {
     public convenience init() {
         self.init(articleParser: .init(), storyInfoParser: .init())
     }

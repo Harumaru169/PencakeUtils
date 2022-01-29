@@ -10,13 +10,13 @@ import Foundation
 
 public struct ParseOptions: Codable {
     public var language: Language
-    public var newlineCharacter: NewlineCharacter?
+    public var newline: Newline?
     
     public init(
         language: Language,
-        replaceNewlineCharWith newlineCharacter: NewlineCharacter? = nil
+        newline: Newline? = nil
     ) {
         self.language = language
-        self.newlineCharacter = newlineCharacter
+        self.newline = newline
     }
 }

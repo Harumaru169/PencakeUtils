@@ -43,14 +43,14 @@ struct ArticleCommand: AsyncParsableCommand {
     @Option(
         name: [.short, .customLong("newline-code")],
         help: "Newline code for text. If not specified, the same newline code as in the original file will be used.",
-        completion: .list(NewlineCharacter.allCases.map(\.rawValue)),
+        completion: .list(Newline.allCases.map(\.rawValue)),
         transform: { string in
-            guard let result = NewlineCharacter(rawValue: string) else {
+            guard let result = Newline(rawValue: string) else {
                 throw ExecutionError.invalidNewlineCode
             }
             return result
         })
-    var newlineCharacter: NewlineCharacter? = nil
+    var newline: Newline? = nil
     
     @Flag(
         name: [.customLong("pretty-printed"), .customShort("p")],
@@ -59,7 +59,7 @@ struct ArticleCommand: AsyncParsableCommand {
     var isFormatPrettyPrinted = false
     
     func runAsync() async throws {
-        let options = ParseOptions(language: language, replaceNewlineCharWith: newlineCharacter)
+        let options = ParseOptions(language: language, newline: newline)
         
         let article = try await ArticleParser().parse(fileURL: URL(fileURLWithPath: path), options: options)
         
@@ -93,7 +93,7 @@ extension ArticleCommand {
                 case .invalidLanguage:
                     return "Use \(Language.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
                 case .invalidNewlineCode:
-                    return "Use \(NewlineCharacter.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
+                    return "Use \(Newline.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
             }
         }
     }
