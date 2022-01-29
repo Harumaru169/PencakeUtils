@@ -30,13 +30,12 @@ public class ArticleParser<NewlineCharacterReplacerType: NewlineCharacterReplace
             throw ParseError.dataCorrupted
         }
         
-        let title, body: String
+        let title = match.group(at: 1)!
         
+        let body: String
         if let newlineCharacter = options.newlineCharacter {
-            title = newlineCharacterReplacer.replacingAll(in: match.group(at: 1)!, with: newlineCharacter)
             body = newlineCharacterReplacer.replacingAll(in: match.group(at: 4)!, with: newlineCharacter)
         } else {
-            title = match.group(at: 1)!
             body = match.group(at: 4)!
         }
         
