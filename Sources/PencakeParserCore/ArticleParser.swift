@@ -9,10 +9,17 @@
 import Foundation
 import Regex
 
-public class ArticleParser: ArticleParserProtocol {
-    public init() {}
+public class ArticleParser<NewlineCharacterReplacerType: NewlineCharacterReplacerProtocol>: ArticleParserProtocol {
     
-    private static let regex: Regex = "(.*?)(\n{2}|(?:\r\n){2})(.*?)\\2([\\s\\S]*)".r!
+    private let newlineCharacterReplacer: NewlineCharacterReplacerType
+    
+    init(newlineCharacterReplacer: NewlineCharacterReplacerType) {
+        self.newlineCharacterReplacer = newlineCharacterReplacer
+    }
+    
+    private static var regex: Regex {
+        "(.*?)(\n{2}|(?:\r\n){2})(.*?)\\2([\\s\\S]*)".r!
+    }
     
     public func parse(from data: Data, options: ParseOptions) async throws -> Article {
         guard let text = String(data: data, encoding: .utf8) else {
@@ -23,6 +30,16 @@ public class ArticleParser: ArticleParserProtocol {
             throw ParseError.dataCorrupted
         }
         
+        let title, body: String
+        
+        if let newlineCharacter = options.newlineCharacter {
+            title = newlineCharacterReplacer.replacingAll(in: match.group(at: 1)!, with: newlineCharacter)
+            body = newlineCharacterReplacer.replacingAll(in: match.group(at: 4)!, with: newlineCharacter)
+        } else {
+            title = match.group(at: 1)!
+            body = match.group(at: 4)!
+        }
+        
         let editDateString = match.group(at: 3)!
         let dateFormatter = options.language.dateFormatterForArticle
         guard let editDate = dateFormatter.date(from: editDateString)
@@ -30,11 +47,7 @@ public class ArticleParser: ArticleParserProtocol {
             throw ParseError.invalidDateFormat(dateString: editDateString)
         }
         
-        return Article(
-            title: match.group(at: 1)!,
-            editDate: editDate,
-            body: match.group(at: 4)!
-        )
+        return Article(title: title, editDate: editDate, body: body)
     }
     
     public func parse(fileURL: URL, options: ParseOptions) async throws -> Article {
@@ -42,7 +55,7 @@ public class ArticleParser: ArticleParserProtocol {
             throw ParseError.failedToReadFile(fileName: fileURL.lastPathComponent)
         }
         
-        return try await parse(from: data, language: options.language)
+        return try await parse(from: data, options: options)
     }
 }
 
@@ -68,5 +81,11 @@ extension ArticleParser {
                     return "Failed to read \(fileName) file."
             }
         }
+    }
+}
+
+extension ArticleParser where NewlineCharacterReplacerType == NewlineCharacterReplacer {
+    public convenience init() {
+        self.init(newlineCharacterReplacer: .init())
     }
 }
