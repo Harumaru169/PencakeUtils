@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum Language: String, RawRepresentable, CaseIterable, Decodable {
+public enum Language: String, RawRepresentable, CaseIterable, Codable {
     case english
     case japanese
 }
