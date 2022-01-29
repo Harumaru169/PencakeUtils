@@ -40,6 +40,18 @@ struct StoryCommand: AsyncParsableCommand {
         })
     var language: Language = .english
     
+    @Option(
+        name: [.short, .customLong("newline-code")],
+        help: "Newline code for text. If not specified, the same newline code as in the original file will be used.",
+        completion: .list(NewlineCharacter.allCases.map(\.rawValue)),
+        transform: { string in
+            guard let result = NewlineCharacter(rawValue: string) else {
+                throw ExecutionError.invalidNewlineCode
+            }
+            return result
+        })
+    var newlineCharacter: NewlineCharacter? = nil
+    
     @Flag(
         name: [.customLong("pretty-printed"), .customShort("p")],
         help: "Print the JSON contents in pretty printed style."
@@ -49,7 +61,9 @@ struct StoryCommand: AsyncParsableCommand {
     
     
     func runAsync() async throws {
-        let story = try await StoryParser().parse(directoryURL: directoryURL, language: language)
+        let options = ParseOptions(language: language, replaceNewlineCharWith: newlineCharacter)
+        
+        let story = try await StoryParser().parse(directoryURL: directoryURL, options: options)
         
         let jsonEncoder = JSONEncoder()
         if isFormatPrettyPrinted {
@@ -68,12 +82,16 @@ extension StoryCommand {
         
         case invalidLanguage
         
+        case invalidNewlineCode
+        
         var description: String {
             switch self {
                 case .directoryDoesNotExist(path: let path):
                     return "The directory does not exist: \(path)"
                 case .invalidLanguage:
-                    return "Invalid language specification. Please use \(Language.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
+                    return "Use \(Language.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
+                case .invalidNewlineCode:
+                    return "Use \(NewlineCharacter.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
             }
         }
     }
