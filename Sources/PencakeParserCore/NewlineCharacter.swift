@@ -43,7 +43,7 @@ extension NewlineCharacter {
                 case .lf:
                     return "Line Feed"
                 case .crlf:
-                    return "Carriage Return & Line Feed"
+                    return "Carriage Return + Line Feed"
             }
         }
     }
