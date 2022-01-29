@@ -30,7 +30,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
             for articleData in articleDatas {
                 group.addTask {
                     do {
-                        return try await self.articleParser.parse(from: articleData, language: options.language)
+                        return try await self.articleParser.parse(from: articleData, options: options)
                     } catch {
                         throw ParseError.failedToParseArticle(fileName: nil, error: error)
                     }
@@ -76,7 +76,7 @@ public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoPars
                         throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
                     }
                     do {
-                        return try await self.articleParser.parse(from: articleData, language: options.language)
+                        return try await self.articleParser.parse(from: articleData, options: options)
                     } catch {
                         throw ParseError.failedToParseArticle(fileName: articleFileURL.lastPathComponent, error: error)
                     }
