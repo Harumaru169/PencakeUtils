@@ -14,7 +14,7 @@ struct PencakeCommand: ParsableCommand {
         commandName: "pencakeparser",
         abstract: "Pencake Utilities.",
         discussion: "",
-        version: "0.0.1",
+        version: "version 0.0.4",
         shouldDisplay: true,
         subcommands: [ArticleCommand.self, StoryCommand.self],
         defaultSubcommand: StoryCommand.self,
