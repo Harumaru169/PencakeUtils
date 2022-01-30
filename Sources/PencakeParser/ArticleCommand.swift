@@ -28,43 +28,15 @@ struct ArticleCommand: AsyncParsableCommand {
         })
     var path: String
     
-    @Option(
-        name: [.short, .customLong("lang")],
-        help: "Language of the article. This will be used to parse dates.",
-        completion: .list(Language.allCases.map(\.rawValue)),
-        transform: { string in
-            guard let result = Language(rawValue: string) else {
-                throw ExecutionError.invalidLanguage
-            }
-            return result
-        })
-    var language: Language = .english
-    
-    @Option(
-        name: [.short, .customLong("newline-code")],
-        help: "Newline code for text. If not specified, the same newline code as in the original file will be used.",
-        completion: .list(Newline.allCases.map(\.rawValue)),
-        transform: { string in
-            guard let result = Newline(rawValue: string) else {
-                throw ExecutionError.invalidNewlineCode
-            }
-            return result
-        })
-    var newline: Newline? = nil
-    
-    @Flag(
-        name: [.customLong("pretty-printed"), .customShort("p")],
-        help: "Print the JSON contents in pretty printed style."
-    )
-    var isFormatPrettyPrinted = false
+    @OptionGroup var commandOptions: ParseCommandOptions
     
     func runAsync() async throws {
-        let options = ParseOptions(language: language, newline: newline)
+        let options = commandOptions.parseOptions
         
         let article = try await ArticleParser().parse(fileURL: URL(fileURLWithPath: path), options: options)
         
         let jsonEncoder = JSONEncoder()
-        if isFormatPrettyPrinted {
+        if commandOptions.isFormatPrettyPrinted {
             jsonEncoder.outputFormatting = .prettyPrinted
         }
         jsonEncoder.dateEncodingStrategy = .iso8601
@@ -80,20 +52,12 @@ extension ArticleCommand {
         
         case failedToReadData
         
-        case invalidLanguage
-        
-        case invalidNewlineCode
-        
         var description: String {
             switch self {
                 case .fileDoesNotExist(let path):
                     return "The file does not exist: \(path)"
                 case .failedToReadData:
                     return "Failed to read the contents of the file."
-                case .invalidLanguage:
-                    return "Use \(Language.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
-                case .invalidNewlineCode:
-                    return "Use \(Newline.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
             }
         }
     }
