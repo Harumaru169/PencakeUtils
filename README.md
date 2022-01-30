@@ -30,12 +30,11 @@ import PencakeParserCore
 
 let storyURL = URL(fileURLWithPath: "path_to_story_directory")
 
-let storyParser = StoryParser(
-    articleParser: ArticleParser(),
-    storyInfoParser: StoryInfoParser()
-)
+let storyParser = StoryParser()
 
-let story = try await storyParser.parse(directoryURL: storyURL, language: .english)
+let options = ParseOptions(language: .english, newline: .lf)
+
+let story = try await storyParser.parse(directoryURL: storyURL, options: options)
 
 print("article count: \(story.articles.count)")
 
@@ -60,6 +59,6 @@ The script will copy the binary to`/usr/local/bin`.
 via SwiftPM:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Harumaru169/PencakeParser", from: "0.1.0")
+    .package(url: "https://github.com/Harumaru169/PencakeParser", from: "0.4.0")
 ]
 ```
