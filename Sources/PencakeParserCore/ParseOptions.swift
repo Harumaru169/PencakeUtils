@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ParseOptions: Codable {
+public struct ParseOptions: Codable, Sendable {
     public var language: Language
     public var newline: Newline?
     

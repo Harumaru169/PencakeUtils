@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol StoryInfoParserProtocol: Decodable {
+public protocol StoryInfoParserProtocol: Decodable, Sendable {
     func parse(from: Data) async throws -> (Story, articleCount: Int)
     
     func parse(fileURL: URL) async throws -> (Story, articleCount: Int)

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol NewlineReplacerProtocol: Decodable {
+public protocol NewlineReplacerProtocol: Decodable, Sendable {
     func replaceAll(in: inout String, with: Newline)
     
     func replacingAll(in: String, with: Newline) -> String

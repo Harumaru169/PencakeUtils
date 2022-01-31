@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum Newline: String, RawRepresentable, CaseIterable, Codable {
+public enum Newline: String, RawRepresentable, CaseIterable, Codable, Sendable {
     case cr
     case lf
     case crlf

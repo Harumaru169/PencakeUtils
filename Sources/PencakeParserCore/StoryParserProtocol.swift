@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol StoryParserProtocol: Decodable {
+public protocol StoryParserProtocol: Decodable, Sendable {
     @available(*, deprecated, message: "Use 'parse(storyInfoData:articleDatas:options:)' instead.")
     func parse(storyInfoData: Data, articleDatas: [Data], language: Language) async throws -> Story
     

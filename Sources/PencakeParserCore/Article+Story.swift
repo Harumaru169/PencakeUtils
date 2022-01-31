@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Article: Codable, Equatable {
+public struct Article: Codable, Equatable, Sendable {
     public var title: String
     
     public var editDate: Date
@@ -22,7 +22,7 @@ public struct Article: Codable, Equatable {
     }
 }
 
-public struct Story: Codable, Equatable {
+public struct Story: Codable, Equatable, Sendable {
     public var title: String
     
     public var subtitle: String

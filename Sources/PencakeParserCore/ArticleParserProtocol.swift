@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol ArticleParserProtocol: Decodable {
+public protocol ArticleParserProtocol: Decodable, Sendable {
     @available(*, deprecated, message: "Use 'parse(from:options:)' instead.")
     func parse(from: Data, language: Language) async throws -> Article
     
