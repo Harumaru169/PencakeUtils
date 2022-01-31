@@ -56,8 +56,7 @@ let package = Package(
         ),
         .testTarget(
             name: "PencakeParserCoreTests",
-            dependencies: ["PencakeParserCore"],
-            resources: [.copy("./Resources")]
+            dependencies: ["PencakeParserCore"]
         )
     ]
 )
