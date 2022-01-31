@@ -33,7 +33,7 @@ struct ParseCommandOptions: ParsableArguments {
             }
             return result
         })
-    var newline: Newline? = nil
+    var newline: Newline?
     
     @Flag(
         name: [.customLong("pretty-printed"), .customShort("p")],
