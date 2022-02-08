@@ -9,7 +9,7 @@
 import Foundation
 import Regex
 
-public class StoryInfoParser: StoryInfoParserProtocol {
+public final class StoryInfoParser: StoryInfoParserProtocol {
     public init() {}
     
     private static let dateFormatter: DateFormatter = {

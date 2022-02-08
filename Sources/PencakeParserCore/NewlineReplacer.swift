@@ -9,7 +9,7 @@
 import Foundation
 import Regex
 
-public class NewlineReplacer: NewlineReplacerProtocol {
+public final class NewlineReplacer: NewlineReplacerProtocol {
     
     public init() {}
     

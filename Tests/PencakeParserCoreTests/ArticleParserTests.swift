@@ -93,7 +93,7 @@ class ArticleParserTests: XCTestCase {
 }
 
 extension ArticleParserTests {
-    class NewlineReplacerMock: NewlineReplacerProtocol {
+    final class NewlineReplacerMock: NewlineReplacerProtocol {
         func replaceAll(in: inout String, with: Newline) {
             return
         }

@@ -51,7 +51,7 @@ class StoryParserTests: XCTestCase {
 }
 
 extension StoryParserTests {
-    class StoryInfoParserMock: StoryInfoParserProtocol {
+    final class StoryInfoParserMock: StoryInfoParserProtocol {
         func parse(from: Data) async throws -> (Story, articleCount: Int) {
             return Constants.storyInfo
         }
@@ -61,7 +61,7 @@ extension StoryParserTests {
         }
     }
     
-    class ArticleParserMock: ArticleParserProtocol {
+    final class ArticleParserMock: ArticleParserProtocol {
         func parse(from: Data, options: ParseOptions) async throws -> Article {
             return Constants.article
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoParserType: StoryInfoParserProtocol>: StoryParserProtocol {
+public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoParserType: StoryInfoParserProtocol>: StoryParserProtocol {
     private let articleParser: ArticleParserType
     private let storyInfoParser: StoryInfoParserType
     

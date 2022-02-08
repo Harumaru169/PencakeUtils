@@ -9,7 +9,7 @@
 import Foundation
 import Regex
 
-public class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: ArticleParserProtocol {
+public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: ArticleParserProtocol {
     
     private let newlineReplacer: NewlineReplacerType
     
