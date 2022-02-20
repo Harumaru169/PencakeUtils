@@ -52,11 +52,11 @@ class StoryParserTests: XCTestCase {
 
 extension StoryParserTests {
     final class StoryInfoParserMock: StoryInfoParserProtocol {
-        func parse(from: Data) async throws -> (Story, articleCount: Int) {
+        func parse(from: Data) async throws -> StoryInformation {
             return Constants.storyInfo
         }
         
-        func parse(fileURL: URL) async throws -> (Story, articleCount: Int) {
+        func parse(fileURL: URL) async throws -> StoryInformation {
             return Constants.storyInfo
         }
     }
@@ -84,10 +84,7 @@ extension StoryParserTests {
         
         static let articles = Array(repeating: article, count: 3)
         
-        static let storyInfo: (Story, articleCount: Int) = (
-            Story(title: "title", subtitle: "subtitle", createdDate: date, exportedDate: date, articles: []),
-            3
-        )
+        static let storyInfo: StoryInformation = .init(title: "title", subtitle: "subtitle", createdDate: date, exportedDate: date, articleCount: 3)
         
         static let story: Story = .init(
             title: "title",
