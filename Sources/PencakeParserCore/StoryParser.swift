@@ -18,10 +18,11 @@ public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryIn
     }
     
     public func parse(storyInfoData: Data, articleDatas: [Data], options: ParseOptions) async throws -> Story {
-        var result: Story
+        var information: StoryInformation
+        var articles: [Article] = []
         
         do {
-            (result, _) = try await storyInfoParser.parse(from: storyInfoData)
+            information = try await storyInfoParser.parse(from: storyInfoData)
         } catch {
             throw ParseError.failedToParseStoryInfo(error: error)
         }
@@ -38,11 +39,11 @@ public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryIn
             }
             
             for try await article in group {
-                result.articles.append(article)
+                articles.append(article)
             }
         }
         
-        return result
+        return Story(information: information, articles: articles)
     }
     
     
@@ -56,25 +57,33 @@ public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryIn
             throw ParseError.failedToReadFile(fileName: storyInfoFileURL.lastPathComponent)
         }
         
-        var (result, articleCount): (Story, Int)
+        var information: StoryInformation
+        var articles: [Article] = []
         
         do {
-            (result, articleCount) = try await storyInfoParser.parse(from: storyInfoData)
+            information = try await storyInfoParser.parse(from: storyInfoData)
         } catch {
             throw ParseError.failedToParseStoryInfo(error: error)
         }
         
         try await withThrowingTaskGroup(of: Article.self) { group in
-            for index in 1...articleCount {
+            for index in 1...information.articleCount {
                 _ = group.addTaskUnlessCancelled {
                     let articleFileName = "Article_" + String(format: "%03d", index)
+                    
                     let articleFileURL = directoryURL
                         .appendingPathComponent("Text")
                         .appendingPathComponent(articleFileName)
                         .appendingPathExtension("txt")
+                    
+                    guard FileManager.default.fileExists(atPath: articleFileURL.path) else {
+                        throw ParseError.fileDoesNotExist(fileName: articleFileURL.lastPathComponent)
+                    }
+                    
                     guard let articleData = FileManager.default.contents(atPath: articleFileURL.path) else {
                         throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
                     }
+                    
                     do {
                         return try await self.articleParser.parse(from: articleData, options: options)
                     } catch {
@@ -84,11 +93,13 @@ public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryIn
             }
             
             for try await article in group {
-                result.articles.append(article)
+                articles.append(article)
             }
         }
         
-        return result
+        guard information.articleCount == articles.count else { fatalError("Inconsistent article count") }
+        
+        return Story(information: information, articles: articles)
     }
     
 }
@@ -100,6 +111,8 @@ extension StoryParser {
         case failedToParseArticle(fileName: String?, error: Error)
         
         case failedToReadFile(fileName: String)
+        
+        case fileDoesNotExist(fileName: String)
         
         case unexpected(error: Error)
         
@@ -115,6 +128,8 @@ extension StoryParser {
                     }
                 case .failedToReadFile(let fileName):
                     return "Failed to read \(fileName) file."
+                case .fileDoesNotExist(let fileName):
+                    return "\(fileName) does not exist"
                 case .unexpected(let error):
                     return "Unexpected error: \(error)"
             }
