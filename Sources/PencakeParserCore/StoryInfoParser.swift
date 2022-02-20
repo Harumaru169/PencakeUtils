@@ -23,7 +23,7 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
         groupNames: "lineBreak", "title", "subtitle", "createdAt", "exportedAt", "articleCount", "articles"
     )
     
-    public func parse(from data: Data) async throws -> (Story, articleCount: Int) {
+    public func parse(from data: Data) async throws -> StoryInformation {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ParseError.invalidTextEncoding
         }
@@ -48,19 +48,16 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
             throw ParseError.invalidNumberFormat(numberString: articleCountString)
         }
         
-        return (
-            Story(
-                title: match.group(named: "title")!,
-                subtitle: match.group(named: "subtitle")!,
-                createdDate: createdDate,
-                exportedDate: exportedDate,
-                articles: []
-            ),
+        return StoryInformation(
+            title: match.group(named: "title")!,
+            subtitle: match.group(named: "subtitle")!,
+            createdDate: createdDate,
+            exportedDate: exportedDate,
             articleCount: articleCount
         )
     }
     
-    public func parse(fileURL: URL) async throws -> (Story, articleCount: Int) {
+    public func parse(fileURL: URL) async throws -> StoryInformation {
         guard let data = FileManager.default.contents(atPath: fileURL.path) else {
             throw ParseError.failedToReadFile(fileName: fileURL.lastPathComponent)
         }
