@@ -15,9 +15,12 @@ public struct Article: Codable, Equatable, Sendable {
     
     public var body: String
     
-    public init(title: String, editDate: Date, body: String) {
+    public var photos: [Photo]
+    
+    public init(title: String, editDate: Date, body: String, photos: [Photo] = []) {
         self.title = title
         self.editDate = editDate
         self.body = body
+        self.photos = photos
     }
 }
