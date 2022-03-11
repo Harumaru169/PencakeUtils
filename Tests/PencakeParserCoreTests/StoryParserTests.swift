@@ -27,7 +27,8 @@ class StoryParserTests: XCTestCase {
     func testParsingFromURL() async throws {
         let storyParser = StoryParser(
             articleParser: ArticleParserMock(),
-            storyInfoParser: StoryInfoParserMock()
+            storyInfoParser: StoryInfoParserMock(),
+            photosLoader: PhotosLoaderMock()
         )
         
         let storyURL = directoryURL!.appendingPathComponent("MockStory", isDirectory: true)
@@ -35,17 +36,6 @@ class StoryParserTests: XCTestCase {
         try Constants.storyFileWrapper.write(to: storyURL, originalContentsURL: nil)
         
         let story = try await storyParser.parse(directoryURL: storyURL, language: .english)
-        XCTAssertEqual(story, Constants.story)
-    }
-    
-    func testParsingFromData() async throws {
-        let storyParser = StoryParser(
-            articleParser: ArticleParserMock(),
-            storyInfoParser: StoryInfoParserMock()
-        )
-        
-        let story = try await storyParser.parse(storyInfoData: Constants.data, articleDatas: Constants.dataArray, language: .english)
-        
         XCTAssertEqual(story, Constants.story)
     }
 }
@@ -68,6 +58,12 @@ extension StoryParserTests {
         
         func parse(fileURL: URL, options: ParseOptions) async throws -> Article {
             return Constants.article
+        }
+    }
+    
+    final class PhotosLoaderMock: PhotosLoaderProtocol {
+        func load(from: URL, articleNumber: Int?) async throws -> [Photo] {
+            return []
         }
     }
 }
@@ -97,9 +93,12 @@ extension StoryParserTests {
         static let storyFileWrapper: FileWrapper = {
             let textDirectory = FileWrapper(directoryWithFileWrappers: [:])
             
+            let photosDirectory = FileWrapper(directoryWithFileWrappers: [:])
+            
             let storyDirectory = FileWrapper(directoryWithFileWrappers: [
                 "Story.txt": .init(regularFileWithContents: data),
-                "Text": textDirectory
+                "Text": textDirectory,
+                "Photos": photosDirectory
             ])
             
             for index in 1...3 {
