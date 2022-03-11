@@ -8,13 +8,19 @@
 
 import Foundation
 
-public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoParserType: StoryInfoParserProtocol>: StoryParserProtocol {
+public final class StoryParser<
+    ArticleParserType: ArticleParserProtocol,
+    StoryInfoParserType: StoryInfoParserProtocol,
+    PhotosLoaderType: PhotosLoaderProtocol
+>: StoryParserProtocol {
     private let articleParser: ArticleParserType
     private let storyInfoParser: StoryInfoParserType
+    private let photosLoader: PhotosLoaderType
     
-    init(articleParser: ArticleParserType, storyInfoParser: StoryInfoParserType) {
+    init(articleParser: ArticleParserType, storyInfoParser: StoryInfoParserType, photosLoader: PhotosLoaderType) {
         self.articleParser = articleParser
         self.storyInfoParser = storyInfoParser
+        self.photosLoader = photosLoader
     }
     
     public func parse(directoryURL: URL, options: ParseOptions) async throws -> Story {
@@ -35,9 +41,11 @@ public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryIn
             throw ParseError.failedToParseStoryInfo(error: error)
         }
         
+        let photosDirectoryURL = directoryURL.appendingPathComponent("Photos", isDirectory: true)
+        
         try await withThrowingTaskGroup(of: Article.self) { group in
             for index in 1...information.articleCount {
-                _ = group.addTaskUnlessCancelled {
+                _ = group.addTaskUnlessCancelled { [self] in
                     let articleFileName = "Article_" + String(format: "%03d", index)
                     
                     let articleFileURL = directoryURL
@@ -54,7 +62,9 @@ public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryIn
                     }
                     
                     do {
-                        return try await self.articleParser.parse(from: articleData, options: options)
+                        var article = try await self.articleParser.parse(from: articleData, options: options)
+                        article.photos = try await self.photosLoader.load(from: photosDirectoryURL, articleNumber: index)
+                        return article
                     } catch {
                         throw ParseError.failedToParseArticle(fileName: articleFileURL.lastPathComponent, error: error)
                     }
@@ -106,8 +116,10 @@ extension StoryParser {
     }
 }
 
-extension StoryParser where ArticleParserType == ArticleParser<NewlineReplacer>, StoryInfoParserType == StoryInfoParser {
+extension StoryParser where ArticleParserType == ArticleParser<NewlineReplacer>,
+                            StoryInfoParserType == StoryInfoParser,
+                            PhotosLoaderType == PhotosLoader {
     public convenience init() {
-        self.init(articleParser: .init(), storyInfoParser: .init())
+        self.init(articleParser: .init(), storyInfoParser: .init(), photosLoader: .init())
     }
 }
