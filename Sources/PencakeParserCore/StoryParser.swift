@@ -17,37 +17,6 @@ public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryIn
         self.storyInfoParser = storyInfoParser
     }
     
-    public func parse(storyInfoData: Data, articleDatas: [Data], options: ParseOptions) async throws -> Story {
-        var information: StoryInformation
-        var articles: [Article] = []
-        
-        do {
-            information = try await storyInfoParser.parse(from: storyInfoData)
-        } catch {
-            throw ParseError.failedToParseStoryInfo(error: error)
-        }
-        
-        try await withThrowingTaskGroup(of: Article.self) { group in
-            for articleData in articleDatas {
-                group.addTask {
-                    do {
-                        return try await self.articleParser.parse(from: articleData, options: options)
-                    } catch {
-                        throw ParseError.failedToParseArticle(fileName: nil, error: error)
-                    }
-                }
-            }
-            
-            for try await article in group {
-                articles.append(article)
-            }
-        }
-        
-        return Story(information: information, articles: articles)
-    }
-    
-    
-    
     public func parse(directoryURL: URL, options: ParseOptions) async throws -> Story {
         let storyInfoFileURL = directoryURL
             .appendingPathComponent("Story")
