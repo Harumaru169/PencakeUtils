@@ -30,16 +30,35 @@ struct StoryCommand: AsyncParsableCommand {
     
     @OptionGroup var commandOptions: ParseCommandOptions
     
+    @Flag(
+        name: .customLong("include-photo-data"),
+        help: "Include photo data in the output."
+    ) var includePhotoData = false
+    
+    var jsonEncoder: JSONEncoder {
+        let jsonEncoder = JSONEncoder()
+        
+        if self.commandOptions.isFormatPrettyPrinted {
+            jsonEncoder.outputFormatting = .prettyPrinted
+        }
+        
+        jsonEncoder.dateEncodingStrategy = .iso8601
+        
+        if !self.includePhotoData {
+            jsonEncoder.dataEncodingStrategy = .custom({ _, encoder in
+                var container = encoder.singleValueContainer()
+                try container.encodeNil()
+            })
+        }
+        
+        return jsonEncoder
+    }
+    
     func runAsync() async throws {
         let options = commandOptions.parseOptions
         
         let story = try await StoryParser().parse(directoryURL: directoryURL, options: options)
         
-        let jsonEncoder = JSONEncoder()
-        if commandOptions.isFormatPrettyPrinted {
-            jsonEncoder.outputFormatting = .prettyPrinted
-        }
-        jsonEncoder.dateEncodingStrategy = .iso8601
         let jsonData = try jsonEncoder.encode(story)
         
         print(String(data: jsonData, encoding: .utf8) ?? "nil")
