@@ -13,10 +13,3 @@ public protocol StoryParserProtocol: Decodable, Sendable {
     
     func parse(zipFileURL: URL, options: ParseOptions) async throws -> Story
 }
-
-extension StoryParserProtocol {
-    @available(*, deprecated, message: "Use 'parse(directoryURL:options:)' instead.")
-    public func parse(directoryURL: URL, language: Language) async throws -> Story {
-        return try await parse(directoryURL: directoryURL, options: .init(language: language))
-    }
-}

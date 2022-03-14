@@ -36,7 +36,8 @@ class ArticleParserTests: XCTestCase {
             
             XCTAssertTrue(writingResult, "Failed to write a file to the disk")
             
-            let article = try await articleParser.parse(fileURL: fileURL, language: .english)
+            let parseOptions = ParseOptions(language: .english)
+            let article = try await articleParser.parse(fileURL: fileURL, options: parseOptions)
             XCTAssertEqual(article, testArticle)
         }
     }
@@ -50,7 +51,8 @@ class ArticleParserTests: XCTestCase {
             
             let articleData = articleString.data(using: .utf8)!
             
-            let article = try await articleParser.parse(from: articleData, language: .english)
+            let parseOptions = ParseOptions(language: .english)
+            let article = try await articleParser.parse(from: articleData, options: parseOptions)
             
             XCTAssertEqual(article, testArticle)
         }
@@ -71,7 +73,8 @@ class ArticleParserTests: XCTestCase {
                 return
             }
             
-            let article = try await articleParser.parse(fileURL: fileURL, language: .japanese)
+            let parseOptions = ParseOptions(language: .japanese)
+            let article = try await articleParser.parse(fileURL: fileURL, options: parseOptions)
             XCTAssertEqual(article, testArticle)
         }
     }
@@ -85,7 +88,8 @@ class ArticleParserTests: XCTestCase {
             
             let articleData = articleString.data(using: .utf8)!
             
-            let article = try await articleParser.parse(from: articleData, language: .japanese)
+            let parseOptions = ParseOptions(language: .japanese)
+            let article = try await articleParser.parse(from: articleData, options: parseOptions)
             
             XCTAssertEqual(article, testArticle)
         }

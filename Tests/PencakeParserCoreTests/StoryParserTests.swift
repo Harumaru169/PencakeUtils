@@ -36,7 +36,8 @@ class StoryParserTests: XCTestCase {
         
         try Constants.storyFileWrapper.write(to: storyURL, originalContentsURL: nil)
         
-        let story = try await storyParser.parse(directoryURL: storyURL, language: .english)
+        let parseOptions = ParseOptions(language: .english)
+        let story = try await storyParser.parse(directoryURL: storyURL, options: parseOptions)
         XCTAssertEqual(story, Constants.story)
     }
     
