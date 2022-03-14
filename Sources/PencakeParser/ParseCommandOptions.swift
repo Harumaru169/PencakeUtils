@@ -54,9 +54,11 @@ extension ParseCommandOptions {
         var description: String {
             switch self {
                 case .invalidLanguage:
-                    return "Use \(Language.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
+                    let languageCodes = Language.allCases.map { "'\($0.rawValue)'" }
+                    return "Use \(languageCodes.formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
                 case .invalidNewlineCode:
-                    return "Use \(Newline.allCases.map(\.rawValue).formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
+                    let newlineCodes = Newline.allCases.map { "'\($0.rawValue)'" }
+                    return "Use \(newlineCodes.formatted(.list(type: .or).locale(.init(identifier: "en_US_POSIX"))))."
             }
         }
     }

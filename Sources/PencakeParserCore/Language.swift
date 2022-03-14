@@ -9,8 +9,8 @@
 import Foundation
 
 public enum Language: String, RawRepresentable, CaseIterable, Codable, Sendable {
-    case english
-    case japanese
+    case english = "en"
+    case japanese = "ja"
 }
 
 extension Language {
