@@ -13,7 +13,7 @@ import PencakeParserCore
 struct ParseCommandOptions: ParsableArguments {
     @Option(
         name: [.short, .customLong("lang")],
-        help: "Language of the article. This will be used to parse dates.",
+        help: "Language of the article's format. This will decide how to parse date expression.",
         completion: .list(Language.allCases.map(\.rawValue)),
         transform: { string in
             guard let result = Language(rawValue: string) else {
@@ -25,7 +25,7 @@ struct ParseCommandOptions: ParsableArguments {
     
     @Option(
         name: [.short, .customLong("newline-code")],
-        help: "Newline code for text. If not specified, the same newline code as in the original file will be used.",
+        help: "Newline code of output. If not specified, the same newline code as in the original file will be output.",
         completion: .list(Newline.allCases.map(\.rawValue)),
         transform: { string in
             guard let result = Newline(rawValue: string) else {

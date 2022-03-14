@@ -14,11 +14,11 @@ struct StoryCommand: AsyncParsableCommand {
     
     static let configuration = CommandConfiguration(
         commandName: "story",
-        abstract: "Parses a Pencake story and prints in JSON format."
+        abstract: "Parses Pencake story and prints in JSON format"
     )
     
     @Argument(
-        help: "Path to the directory to read.",
+        help: "Path to the directory to read",
         completion: .directory,
         transform: { string in
             guard FileManager.default.fileExists(atPath: string) else {
@@ -32,7 +32,7 @@ struct StoryCommand: AsyncParsableCommand {
     
     @Flag(
         name: .customLong("include-photo-data"),
-        help: "Include photo data in the output."
+        help: "Include photo data in the output"
     ) var includePhotoData = false
     
     var jsonEncoder: JSONEncoder {

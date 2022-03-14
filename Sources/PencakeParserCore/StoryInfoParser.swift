@@ -82,15 +82,15 @@ extension StoryInfoParser {
         public var description: String {
             switch self {
                 case .invalidTextEncoding:
-                    return "Invalid text encoding."
+                    return "Invalid text encoding"
                 case .dataCorrupted:
-                    return "The content does not follow the format."
+                    return "The content does not follow the format"
                 case .invalidDateFormat(let dateString):
                     return "Invalid date format: \(dateString)"
                 case .invalidNumberFormat(let numberString):
                     return "Invalid number format: \(numberString)"
                 case .failedToReadFile(let fileName):
-                    return "Failed to read \(fileName) file."
+                    return "Failed to read \(fileName) file"
             }
         }
     }

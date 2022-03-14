@@ -14,11 +14,11 @@ struct ArticleCommand: AsyncParsableCommand {
     
     static let configuration: CommandConfiguration = .init(
         commandName: "article",
-        abstract: "Parses a Pencake article and prints in JSON format."
+        abstract: "Parses Pencake article and prints in JSON format"
     )
     
     @Argument(
-        help: "Path to the file to read.",
+        help: "Path to the file to read",
         completion: .file(extensions: ["txt"]),
         transform: { string in
             guard FileManager.default.fileExists(atPath: string) else {
@@ -57,7 +57,7 @@ extension ArticleCommand {
                 case .fileDoesNotExist(let path):
                     return "The file does not exist: \(path)"
                 case .failedToReadData:
-                    return "Failed to read the contents of the file."
+                    return "Failed to read the contents of the file"
             }
         }
     }

@@ -30,7 +30,7 @@ class StoryInfoParserTests: XCTestCase {
         let fileURL = directoryURL!.appendingPathComponent("Story.txt", isDirectory: false)
         let writingResult = FileManager.default.createFile(atPath: fileURL.path, contents: Self.storyInfoString.data(using: .utf8))
         
-        XCTAssertTrue(writingResult, "Failed to write a file to the disk.")
+        XCTAssertTrue(writingResult, "Failed to write a file to the disk")
         
         let storyInfo = try await storyInfoParser.parse(fileURL: fileURL)
         

@@ -134,7 +134,7 @@ extension StoryParser {
                         return "Failed to parse article: \(error)"
                     }
                 case .failedToReadFile(let fileName):
-                    return "Failed to read \(fileName) file."
+                    return "Failed to read \(fileName) file"
                 case .fileDoesNotExist(let fileName):
                     return "\(fileName) does not exist"
                 case .failedToExtractZipFile(let error):

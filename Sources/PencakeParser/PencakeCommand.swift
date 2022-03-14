@@ -12,7 +12,7 @@ import ArgumentParser
 struct PencakeCommand: ParsableCommand {
     static let configuration: CommandConfiguration = .init(
         commandName: "pencakeparser",
-        abstract: "Pencake Utilities.",
+        abstract: "Pencake Utilities",
         discussion: "",
         version: "version 0.5.0",
         shouldDisplay: true,
