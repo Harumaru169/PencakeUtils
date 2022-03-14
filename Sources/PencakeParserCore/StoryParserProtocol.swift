@@ -10,6 +10,8 @@ import Foundation
 
 public protocol StoryParserProtocol: Decodable, Sendable {
     func parse(directoryURL: URL, options: ParseOptions) async throws -> Story
+    
+    func parse(zipFileURL: URL, options: ParseOptions) async throws -> Story
 }
 
 extension StoryParserProtocol {
