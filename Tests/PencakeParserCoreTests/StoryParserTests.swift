@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import PencakeParserCore
+import ZIPFoundation
 
 class StoryParserTests: XCTestCase {
     var directoryURL: URL?
@@ -47,6 +48,52 @@ class StoryParserTests: XCTestCase {
         let story = try await storyParser.parse(storyInfoData: Constants.data, articleDatas: Constants.dataArray, language: .english)
         
         XCTAssertEqual(story, Constants.story)
+    }
+    
+    func testParsingFromZipFile() async throws {
+        let fileManager = FileManager.default
+        let tempDirectoryURL = fileManager.temporaryDirectory
+            .appendingPathComponent("PencakeParser_StoryParserTests_PreCompressedDirectory", isDirectory: true)
+        let zipFileURL = fileManager.temporaryDirectory.appendingPathComponent("PencakeParser_StoryParserTests_ZipFile.zip", isDirectory: false)
+        
+        defer {
+            do {
+                try fileManager.removeItem(at: tempDirectoryURL)
+                try fileManager.removeItem(at: zipFileURL)
+            } catch {
+                XCTFail("Failed to remove temporary files and directories")
+            }
+        }
+        
+        do {
+            try Constants.storyFileWrapper.write(to: tempDirectoryURL, originalContentsURL: nil)
+        } catch {
+            XCTFail("File preparation fail: \(error)")
+        }
+        
+        do {
+            let archive = Archive(accessMode: .create)!
+            for subpath in try fileManager.subpathsOfDirectory(atPath: tempDirectoryURL.path) {
+                try archive.addEntry(with: subpath, relativeTo: tempDirectoryURL)
+            }
+            let result = fileManager.createFile(atPath: zipFileURL.path, contents: archive.data, attributes: nil)
+            guard result == true else { fatalError() }
+        } catch {
+            XCTFail("Archive fail: \(error)")
+        }
+        
+        do {
+            let storyParser = StoryParser(
+                articleParser: ArticleParserMock(),
+                storyInfoParser: StoryInfoParserMock()
+            )
+            let parseOptions = ParseOptions(language: .english)
+            let story = try await storyParser.parse(zipFileURL: zipFileURL, options: parseOptions)
+            
+            XCTAssertEqual(story, Constants.story)
+        } catch {
+            XCTFail("Parse fail: \(error)")
+        }
     }
 }
 
