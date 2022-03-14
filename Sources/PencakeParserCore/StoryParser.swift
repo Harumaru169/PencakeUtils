@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ZIPFoundation
 
 public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryInfoParserType: StoryInfoParserProtocol>: StoryParserProtocol {
     private let articleParser: ArticleParserType
@@ -102,6 +103,31 @@ public final class StoryParser<ArticleParserType: ArticleParserProtocol, StoryIn
         return Story(information: information, articles: articles)
     }
     
+    
+    public func parse(zipFileURL: URL, options: ParseOptions) async throws -> Story {
+        let fileManager = FileManager.default
+        let directoryURL = fileManager.temporaryDirectory.appendingPathComponent("PencakeParser-StoryParser-temp", isDirectory: true)
+        if fileManager.fileExists(atPath: directoryURL.path) {
+            try fileManager.removeItem(at: directoryURL)
+        }
+        try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+        
+        defer {
+            do {
+                try fileManager.removeItem(at: directoryURL)
+            } catch {
+                fatalError("Failed to remove temporary directory")
+            }
+        }
+        
+        do {
+            try fileManager.unzipItem(at: zipFileURL, to: directoryURL)
+        } catch {
+            throw ParseError.failedToExtractZipFile(error: error)
+        }
+        
+        return try await parse(directoryURL: directoryURL, options: options)
+    }
 }
 
 extension StoryParser {
@@ -113,6 +139,8 @@ extension StoryParser {
         case failedToReadFile(fileName: String)
         
         case fileDoesNotExist(fileName: String)
+        
+        case failedToExtractZipFile(error: Error)
         
         case unexpected(error: Error)
         
@@ -130,6 +158,8 @@ extension StoryParser {
                     return "Failed to read \(fileName) file."
                 case .fileDoesNotExist(let fileName):
                     return "\(fileName) does not exist"
+                case .failedToExtractZipFile(let error):
+                    return "Failed to extract ZIP file: \(error)"
                 case .unexpected(let error):
                     return "Unexpected error: \(error)"
             }
