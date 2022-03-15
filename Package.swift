@@ -11,7 +11,7 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Pencake",
+            name: "PencakeUtils",
             targets: ["PencakeParser", "PencakeBuilder"]
         ),
         .library(
