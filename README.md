@@ -18,7 +18,7 @@ $ pencakeparser story path_to_story_directory --language english --pretty-printe
   ]
 }
 
-$ pencakeparser story path_to_story_directory -l english -p >> story.json
+$ pencakeparser story path_to_story_zipfile -l english -p >> story.json
 
 $ pencakeparser article path_to_article_file -l japanese >> Article_001.json
 ```
