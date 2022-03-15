@@ -25,11 +25,13 @@ public final class StoryParser<
     }
     
     public func parse(directoryURL: URL, options: ParseOptions) async throws -> Story {
+        let fileManager = FileManager.default
+        
         let storyInfoFileURL = directoryURL
             .appendingPathComponent("Story")
             .appendingPathExtension("txt")
         
-        guard let storyInfoData = FileManager.default.contents(atPath: storyInfoFileURL.path) else {
+        guard let storyInfoData = fileManager.contents(atPath: storyInfoFileURL.path) else {
             throw ParseError.failedToReadFile(fileName: storyInfoFileURL.lastPathComponent)
         }
         
@@ -54,11 +56,11 @@ public final class StoryParser<
                         .appendingPathComponent(articleFileName)
                         .appendingPathExtension("txt")
                     
-                    guard FileManager.default.fileExists(atPath: articleFileURL.path) else {
+                    guard fileManager.fileExists(atPath: articleFileURL.path) else {
                         throw ParseError.fileDoesNotExist(fileName: articleFileURL.lastPathComponent)
                     }
                     
-                    guard let articleData = FileManager.default.contents(atPath: articleFileURL.path) else {
+                    guard let articleData = fileManager.contents(atPath: articleFileURL.path) else {
                         throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
                     }
                     
