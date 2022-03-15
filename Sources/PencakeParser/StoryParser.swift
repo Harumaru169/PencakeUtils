@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PencakeCore
 import ZIPFoundation
 
 public final class StoryParser<

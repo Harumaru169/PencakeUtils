@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PencakeCore
 
 public protocol StoryInfoParserProtocol: Decodable, Sendable {
     func parse(from: Data) async throws -> StoryInformation

@@ -7,8 +7,8 @@
 //
 
 import Foundation
+import PencakeParser
 import ArgumentParser
-import PencakeParserCore
 
 struct ParseCommandOptions: ParsableArguments {
     @Option(

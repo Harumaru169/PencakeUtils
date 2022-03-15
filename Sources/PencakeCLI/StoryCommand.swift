@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import PencakeParserCore
+import PencakeParser
 import ArgumentParser
 
 struct StoryCommand: AsyncParsableCommand {

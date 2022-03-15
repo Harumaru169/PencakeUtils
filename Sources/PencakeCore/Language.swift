@@ -14,7 +14,7 @@ public enum Language: String, RawRepresentable, CaseIterable, Codable, Sendable 
 }
 
 extension Language {
-    internal var dateFormatterForArticle: DateFormatter {
+    public var dateFormatterForArticle: DateFormatter {
         let df = DateFormatter()
         
         switch self {

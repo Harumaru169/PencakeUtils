@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PencakeCore
 import Regex
 
 public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: ArticleParserProtocol {

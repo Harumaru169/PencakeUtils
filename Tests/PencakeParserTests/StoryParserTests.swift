@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import PencakeParserCore
+@testable import PencakeParser
 import ZIPFoundation
 
 class StoryParserTests: XCTestCase {

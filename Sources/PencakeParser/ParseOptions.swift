@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PencakeCore
 
 public struct ParseOptions: Codable, Sendable {
     public var language: Language

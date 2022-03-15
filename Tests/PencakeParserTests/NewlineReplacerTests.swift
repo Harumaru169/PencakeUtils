@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import PencakeParserCore
+@testable import PencakeParser
 
 class NewlineReplacerTests: XCTestCase {
 
