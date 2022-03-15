@@ -1,4 +1,4 @@
-EXECUTABLE_NAME = pencakeparser
+EXECUTABLE_NAME = pencake
 PREFIX = /usr/local
 INSTALL_PATH = $(PREFIX)/bin/$(EXECUTABLE_NAME)
 EXECUTABLE_PATH = $(shell swift build $(SWIFT_BUILD_FLAGS) --show-bin-path)/$(EXECUTABLE_NAME)
