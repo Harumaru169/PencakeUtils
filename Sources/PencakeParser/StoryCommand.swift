@@ -18,15 +18,14 @@ struct StoryCommand: AsyncParsableCommand {
     )
     
     @Argument(
-        help: "Path to the directory to read",
-        completion: .directory,
+        help: "Path to the directory or ZIP file to read",
         transform: { string in
             guard FileManager.default.fileExists(atPath: string) else {
-                throw ExecutionError.directoryDoesNotExist(path: string)
+                throw ExecutionError.itemDoesNotExist(path: string)
             }
             return URL(fileURLWithPath: string)
         })
-    var directoryURL: URL
+    var itemURL: URL
     
     @OptionGroup var commandOptions: ParseCommandOptions
     
@@ -55,9 +54,19 @@ struct StoryCommand: AsyncParsableCommand {
     }
     
     func runAsync() async throws {
+        let fileManager = FileManager.default
         let options = commandOptions.parseOptions
+        var story: Story
+        let storyParser = StoryParser()
+        let itemFileType = try fileManager.type(at: itemURL)
         
-        let story = try await StoryParser().parse(directoryURL: directoryURL, options: options)
+        if itemFileType == .typeDirectory {
+            story = try await storyParser.parse(directoryURL: itemURL, options: options)
+        } else if itemFileType == .typeRegular {
+            story = try await storyParser.parse(zipFileURL: itemURL, options: options)
+        } else {
+            throw ExecutionError.invalidFileType(type: itemFileType)
+        }
         
         let jsonData = try jsonEncoder.encode(story)
         
@@ -67,12 +76,16 @@ struct StoryCommand: AsyncParsableCommand {
 
 extension StoryCommand {
     enum ExecutionError: Error, CustomStringConvertible {
-        case directoryDoesNotExist(path: String)
+        case itemDoesNotExist(path: String)
+        
+        case invalidFileType(type: FileAttributeType)
         
         var description: String {
             switch self {
-                case .directoryDoesNotExist(path: let path):
-                    return "The directory does not exist: \(path)"
+                case .itemDoesNotExist(path: let path):
+                    return "The directory or ZIP file does not exist: \(path)"
+                case .invalidFileType(let type):
+                    return "The file is neither a directory nor a regular file. it has file type '\(type.rawValue)'."
             }
         }
     }
