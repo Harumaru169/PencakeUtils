@@ -27,6 +27,11 @@ public final class StoryParser<
     public func parse(directoryURL: URL, options: ParseOptions) async throws -> Story {
         let fileManager = FileManager.default
         
+        let fileType = try fileManager.type(at: directoryURL)
+        guard fileType == .typeDirectory else {
+            throw ParseError.unexpectedFileType(path: directoryURL.path, expected: .typeDirectory, actual: fileType)
+        }
+        
         let storyInfoFileURL = directoryURL
             .appendingPathComponent("Story")
             .appendingPathExtension("txt")
@@ -87,6 +92,12 @@ public final class StoryParser<
     
     public func parse(zipFileURL: URL, options: ParseOptions) async throws -> Story {
         let fileManager = FileManager.default
+        
+        let fileType = try fileManager.type(at: zipFileURL)
+        guard fileType == .typeRegular else {
+            throw ParseError.unexpectedFileType(path: zipFileURL.path, expected: .typeRegular, actual: fileType)
+        }
+        
         let directoryURL = fileManager.temporaryDirectory.appendingPathComponent("PencakeParser-StoryParser-temp", isDirectory: true)
         if fileManager.fileExists(atPath: directoryURL.path) {
             try fileManager.removeItem(at: directoryURL)
@@ -123,6 +134,8 @@ extension StoryParser {
         
         case failedToExtractZipFile(error: Error)
         
+        case unexpectedFileType(path: String, expected: FileAttributeType, actual: FileAttributeType)
+        
         case unexpected(error: Error)
         
         public var description: String {
@@ -141,6 +154,8 @@ extension StoryParser {
                     return "\(fileName) does not exist"
                 case .failedToExtractZipFile(let error):
                     return "Failed to extract ZIP file: \(error)"
+                case let .unexpectedFileType(path, expected, actual):
+                    return "Expected the file '\(path)' to have file type '\(expected.rawValue)', but actually it has file type '\(actual.rawValue)'"
                 case .unexpected(let error):
                     return "Unexpected error: \(error)"
             }
