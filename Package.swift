@@ -12,7 +12,7 @@ let package = Package(
     products: [
         .library(
             name: "PencakeUtils",
-            targets: ["PencakeParser", "PencakeBuilder"]
+            targets: ["PencakeUtils"]
         ),
         .library(
             name: "PencakeParser",
@@ -67,6 +67,10 @@ let package = Package(
                 "PencakeBuilder",
                 .product(name:"ArgumentParser", package: "swift-argument-parser")
             ]
+        ),
+        .target(
+            name: "PencakeUtils",
+            dependencies: ["PencakeCore", "PencakeParser", "PencakeBuilder"]
         ),
         //MARK: - Test Targets
         .testTarget(
