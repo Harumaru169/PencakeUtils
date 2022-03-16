@@ -51,6 +51,7 @@ public final class StoryParser<
         }
         
         let photosDirectoryURL = directoryURL.appendingPathComponent("Photos", isDirectory: true)
+        let photosDirectoryExists = fileManager.fileExists(atPath: photosDirectoryURL.path)
         
         try await withThrowingTaskGroup(of: Article.self) { group in
             for index in 1...information.articleCount {
@@ -72,7 +73,9 @@ public final class StoryParser<
                     
                     do {
                         var article = try await self.articleParser.parse(from: articleData, options: options)
-                        article.photos = try await self.photosLoader.load(from: photosDirectoryURL, articleNumber: index)
+                        if photosDirectoryExists {
+                            article.photos = try await self.photosLoader.load(from: photosDirectoryURL, articleNumber: index)
+                        }
                         return article
                     } catch {
                         throw ParseError.failedToParseArticle(fileName: articleFileURL.lastPathComponent, error: error)
