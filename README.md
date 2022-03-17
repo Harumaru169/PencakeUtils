@@ -1,13 +1,13 @@
-# PencakeParser
+# PencakeUtils
 
-`pencakeparser` is a CLI tool that converts [PenCake](https://apps.apple.com/jp/app/pencake-シンプルなノート-日記帳/id1382218014)'s articles or stories into a JSON format.
+`pencake` is a CLI tool that converts articles or stories of [PenCake app](https://apps.apple.com/jp/app/pencake-シンプルなノート-日記帳/id1382218014) into JSON format.
 
-`PencakeParserCore` is a library for converting a story or an article to in-memory representation.
+`PencakeParser` is a library for converting stories or articles into in-memory representations.
 
 ## Usage
-### `pencakeparser` Command
+### `pencake` Command
 ```shell
-$ pencakeparser story path_to_story_directory --language english --pretty-printed 
+$ pencake story path_to_story_directory --pretty-printed 
 {
   "exportedDate" : 2022-01-19T07:44:27Z,
   "createdDate" : 2022-01-19T07:28:10Z,
@@ -18,15 +18,15 @@ $ pencakeparser story path_to_story_directory --language english --pretty-printe
   ]
 }
 
-$ pencakeparser story path_to_story_zipfile -l english -p >> story.json
+$ pencake story path_to_story_zipfile -p >> story.json
 
-$ pencakeparser article path_to_article_file -l japanese >> Article_001.json
+$ pencake article path_to_article_file --language ja >> Article_001.json
 ```
-Run `pencakeparser --help` to show help information.
+Run `pencake --help` to show help information.
 
-### `PencakeParserCore` Library
+### `PencakeParser` Library
 ```swift
-import PencakeParserCore
+import PencakeParser
 
 let storyURL = URL(fileURLWithPath: "path_to_story_directory")
 
@@ -45,13 +45,13 @@ print(String(data: jsonData, encoding: .utf8) ?? "nil")
 
 ## Installation
 
-### `pencakeparser` Command
+### `pencake` Command
 Download source code and run `make install` in the project directory.
 
-### `PencakeParserCore` Library
+### Package Dependency
 via SwiftPM:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Harumaru169/PencakeParser", from: "0.6.0")
+    .package(url: "https://github.com/Harumaru169/PencakeUtils", from: "0.6.0")
 ]
 ```
