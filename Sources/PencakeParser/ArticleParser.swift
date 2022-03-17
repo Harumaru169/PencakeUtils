@@ -41,7 +41,7 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
         }
         
         let editDateString = match.group(at: 3)!
-        let dateFormatter = options.language.dateFormatterForArticle
+        let dateFormatter = DateFormatConstants.formatterForArticle(in: options.language)
         guard let editDate = dateFormatter.date(from: editDateString)
         else {
             throw ParseError.invalidDateFormat(dateString: editDateString)

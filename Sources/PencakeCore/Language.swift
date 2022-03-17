@@ -12,20 +12,3 @@ public enum Language: String, RawRepresentable, CaseIterable, Codable, Sendable 
     case english = "en"
     case japanese = "ja"
 }
-
-extension Language {
-    public var dateFormatterForArticle: DateFormatter {
-        let df = DateFormatter()
-        
-        switch self {
-            case .english:
-                df.locale = .init(identifier: "en_US")
-                df.dateFormat = "EEE, MMM dd, yyyy hh:mm a"
-            case .japanese:
-                df.locale = Locale(identifier: "ja_JP")
-                df.dateFormat = "yyyy年MM月dd日(E) HH:mm"
-        }
-        
-        return df
-    }
-}
