@@ -53,7 +53,7 @@ struct StoryCommand: AsyncParsableCommand {
         return jsonEncoder
     }
     
-    func runAsync() async throws {
+    func run() async throws {
         let fileManager = FileManager.default
         let options = commandOptions.parseOptions
         var story: Story

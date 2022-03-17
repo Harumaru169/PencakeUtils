@@ -30,7 +30,7 @@ struct ArticleCommand: AsyncParsableCommand {
     
     @OptionGroup var commandOptions: ParseCommandOptions
     
-    func runAsync() async throws {
+    func run() async throws {
         let options = commandOptions.parseOptions
         
         let article = try await ArticleParser().parse(fileURL: URL(fileURLWithPath: path), options: options)
