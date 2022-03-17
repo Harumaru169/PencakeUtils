@@ -9,15 +9,13 @@
 import Foundation
 import ArgumentParser
 
-struct PencakeCommand: ParsableCommand {
+@main
+struct PencakeCommand: AsyncParsableCommand {
     static let configuration: CommandConfiguration = .init(
-        commandName: "pencakeparser",
+        commandName: "pencake",
         abstract: "Pencake Utilities",
-        discussion: "",
         version: "version 0.6.0",
-        shouldDisplay: true,
         subcommands: [ArticleCommand.self, StoryCommand.self],
-        defaultSubcommand: StoryCommand.self,
-        helpNames: nil
+        defaultSubcommand: StoryCommand.self
     )
 }
