@@ -52,35 +52,10 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
     
     public func parse(fileURL: URL, options: ParseOptions) async throws -> Article {
         guard let data = FileManager.default.contents(atPath: fileURL.path) else {
-            throw ParseError.failedToReadFile(fileName: fileURL.lastPathComponent)
+            throw ParseError.failedToReadFile(path: fileURL.path)
         }
         
         return try await parse(from: data, options: options)
-    }
-}
-
-extension ArticleParser {
-    public enum ParseError: Error, CustomStringConvertible {
-        case invalidTextEncoding
-        
-        case invalidFormat
-        
-        case invalidDateFormat(dateString: String)
-        
-        case failedToReadFile(fileName: String)
-        
-        public var description: String {
-            switch self {
-                case .invalidTextEncoding:
-                    return "Invalid text encoding"
-                case .invalidFormat:
-                    return "The content does not follow the format"
-                case .invalidDateFormat(let dateString):
-                    return "Invalid date format: \(dateString)"
-                case .failedToReadFile(let fileName):
-                    return "Failed to read \(fileName) file"
-            }
-        }
     }
 }
 

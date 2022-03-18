@@ -24,7 +24,7 @@ public final class PhotosLoader: PhotosLoaderProtocol {
         
         let fileType = try fileManager.type(at: directoryURL)
         guard fileType == .typeDirectory else {
-            throw LoadError.unexpectedFileType(path: directoryURL.path, expected: .typeDirectory, actual: fileType)
+            throw ParseError.unexpectedFileType(path: directoryURL.path, expected: .typeDirectory, actual: fileType)
         }
         
         let photoURLs: [URL] = try fileManager.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
@@ -39,21 +39,17 @@ public final class PhotosLoader: PhotosLoaderProtocol {
                     }
                     
                     let articleNumberString = match.group(named: "articleNumber")!
-                    guard let articleNumber = Int(articleNumberString) else {
-                        throw LoadError.invalidNumberFormat(numberString: articleNumberString)
-                    }
+                    let articleNumber = Int(articleNumberString)!
                     
                     if let specifiedArticleNumber = specifiedArticleNumber, articleNumber != specifiedArticleNumber {
                         return nil
                     }
                             
                     let photoNumberString = match.group(named: "photoNumber")!
-                    guard let photoNumber = Int(photoNumberString) else {
-                        throw LoadError.invalidNumberFormat(numberString: photoNumberString)
-                    }
+                    let photoNumber = Int(photoNumberString)!
                     
                     guard let photoData = fileManager.contents(atPath: photoURL.path) else {
-                        throw LoadError.failedToReadFile(fileName: fileName)
+                        throw ParseError.failedToReadFile(path: photoURL.path)
                     }
                     
                     return Photo(
@@ -73,32 +69,6 @@ public final class PhotosLoader: PhotosLoaderProtocol {
             }
             
             return results
-        }
-    }
-}
-
-extension PhotosLoader {
-    public enum LoadError: Error, CustomStringConvertible {
-        //TODO: unnecessary
-        case fileNameCorrupted(fileName: String)
-        
-        case invalidNumberFormat(numberString: String)
-        
-        case failedToReadFile(fileName: String)
-        
-        case unexpectedFileType(path: String, expected: FileAttributeType, actual: FileAttributeType)
-        
-        public var description: String {
-            switch self {
-                case .fileNameCorrupted(let fileName):
-                    return "Corrupted file name: \(fileName)"
-                case .invalidNumberFormat(let numberString):
-                    return "Invalid number format: \(numberString)"
-                case .failedToReadFile(let fileName):
-                    return "Failed to read \(fileName)"
-                case let .unexpectedFileType(path, expected, actual):
-                    return "Expected the file '\(path)' to have file type '\(expected.rawValue)', but actually it has file type '\(actual.rawValue)'"
-            }
         }
     }
 }

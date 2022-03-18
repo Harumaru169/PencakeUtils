@@ -60,11 +60,11 @@ public final class StoryParser<
                         .appendingPathExtension("txt")
                     
                     guard fileManager.fileExists(atPath: articleFileURL.path) else {
-                        throw ParseError.fileDoesNotExist(fileName: articleFileURL.lastPathComponent)
+                        throw ParseError.fileDoesNotExist(path: articleFileURL.path)
                     }
                     
                     guard let articleData = fileManager.contents(atPath: articleFileURL.path) else {
-                        throw ParseError.failedToReadFile(fileName: articleFileURL.lastPathComponent)
+                        throw ParseError.failedToReadFile(path: articleFileURL.path)
                     }
                     
                     do {
@@ -74,7 +74,7 @@ public final class StoryParser<
                         }
                         return article
                     } catch {
-                        throw ParseError.failedToParseArticle(fileName: articleFileURL.lastPathComponent, error: error)
+                        throw ParseError.failedToParseArticle(path: articleFileURL.path, error: error)
                     }
                 }
             }
@@ -119,47 +119,6 @@ public final class StoryParser<
         }
         
         return try await parse(directoryURL: directoryURL, options: options)
-    }
-}
-
-extension StoryParser {
-    public enum ParseError: Error, CustomStringConvertible {
-        case failedToParseStoryInfo(error: Error)
-        
-        case failedToParseArticle(fileName: String?, error: Error)
-        
-        case failedToReadFile(fileName: String)
-        
-        case fileDoesNotExist(fileName: String)
-        
-        case failedToExtractZipFile(error: Error)
-        
-        case unexpectedFileType(path: String, expected: FileAttributeType, actual: FileAttributeType)
-        
-        case unexpected(error: Error)
-        
-        public var description: String {
-            switch self {
-                case .failedToParseStoryInfo(let error):
-                    return "Failed to parse story info: \(error)"
-                case .failedToParseArticle(let fileName, let error):
-                    if let fileName = fileName {
-                        return "Failed to parse \(fileName): \(error)"
-                    } else {
-                        return "Failed to parse article: \(error)"
-                    }
-                case .failedToReadFile(let fileName):
-                    return "Failed to read \(fileName) file"
-                case .fileDoesNotExist(let fileName):
-                    return "\(fileName) does not exist"
-                case .failedToExtractZipFile(let error):
-                    return "Failed to extract ZIP file: \(error)"
-                case let .unexpectedFileType(path, expected, actual):
-                    return "Expected the file '\(path)' to have file type '\(expected.rawValue)', but actually it has file type '\(actual.rawValue)'"
-                case .unexpected(let error):
-                    return "Unexpected error: \(error)"
-            }
-        }
     }
 }
 

@@ -26,7 +26,7 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
         }
         
         guard let match = Self.regex.findFirst(in: text) else {
-            throw ParseError.dataCorrupted
+            throw ParseError.invalidFormat
         }
         
         let createdDateString = match.group(named: "createdAt")!
@@ -39,11 +39,8 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
             throw ParseError.invalidDateFormat(dateString: exportedDateString)
         }
         
-        
         let articleCountString = match.group(named: "articleCount")!
-        guard let articleCount = Int(articleCountString) else {
-            throw ParseError.invalidNumberFormat(numberString: articleCountString)
-        }
+        let articleCount = Int(articleCountString)!
         
         return StoryInformation(
             title: match.group(named: "title")!,
@@ -63,43 +60,9 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
         }
         
         guard let data = FileManager.default.contents(atPath: fileURL.path) else {
-            throw ParseError.failedToReadFile(fileName: fileURL.lastPathComponent)
+            throw ParseError.failedToReadFile(path: fileURL.path)
         }
         
         return try await parse(from: data)
-    }
-}
-
-//TODO: CustomStringConvertible
-extension StoryInfoParser {
-    public enum ParseError: Error, CustomStringConvertible {
-        case invalidTextEncoding
-        
-        case dataCorrupted
-        
-        case invalidDateFormat(dateString: String)
-        
-        case invalidNumberFormat(numberString: String)
-        
-        case failedToReadFile(fileName: String)
-        
-        case unexpectedFileType(path: String, expected: FileAttributeType, actual: FileAttributeType)
-        
-        public var description: String {
-            switch self {
-                case .invalidTextEncoding:
-                    return "Invalid text encoding"
-                case .dataCorrupted:
-                    return "The content does not follow the format"
-                case .invalidDateFormat(let dateString):
-                    return "Invalid date format: \(dateString)"
-                case .invalidNumberFormat(let numberString):
-                    return "Invalid number format: \(numberString)"
-                case .failedToReadFile(let fileName):
-                    return "Failed to read \(fileName) file"
-                case let .unexpectedFileType(path, expected, actual):
-                    return "Expected the file '\(path)' to have file type '\(expected.rawValue)', but actually it has file type '\(actual.rawValue)'"
-            }
-        }
     }
 }
