@@ -14,7 +14,7 @@ struct PencakeCommand: AsyncParsableCommand {
     static let configuration: CommandConfiguration = .init(
         commandName: "pencake",
         abstract: "Pencake Utilities",
-        version: "version 0.6.0",
+        version: "version 0.6.1",
         subcommands: [ArticleCommand.self, StoryCommand.self],
         defaultSubcommand: StoryCommand.self
     )
