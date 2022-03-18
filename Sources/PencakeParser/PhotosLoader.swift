@@ -21,6 +21,12 @@ public final class PhotosLoader: PhotosLoaderProtocol {
     
     public func load(from directoryURL: URL, articleNumber specifiedArticleNumber: Int?) async throws -> [Photo] {
         let fileManager = FileManager.default
+        
+        let fileType = try fileManager.type(at: directoryURL)
+        guard fileType == .typeDirectory else {
+            throw LoadError.unexpectedFileType(path: directoryURL.path, expected: .typeDirectory, actual: fileType)
+        }
+        
         let photoURLs: [URL] = try fileManager.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
         
         return try await withThrowingTaskGroup(of: Photo?.self, returning: [Photo].self) { group in
@@ -80,6 +86,8 @@ extension PhotosLoader {
         
         case failedToReadFile(fileName: String)
         
+        case unexpectedFileType(path: String, expected: FileAttributeType, actual: FileAttributeType)
+        
         public var description: String {
             switch self {
                 case .fileNameCorrupted(let fileName):
@@ -88,6 +96,8 @@ extension PhotosLoader {
                     return "Invalid number format: \(numberString)"
                 case .failedToReadFile(let fileName):
                     return "Failed to read \(fileName)"
+                case let .unexpectedFileType(path, expected, actual):
+                    return "Expected the file '\(path)' to have file type '\(expected.rawValue)', but actually it has file type '\(actual.rawValue)'"
             }
         }
     }

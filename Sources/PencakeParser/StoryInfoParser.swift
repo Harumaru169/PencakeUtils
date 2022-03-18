@@ -55,6 +55,13 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
     }
     
     public func parse(fileURL: URL) async throws -> StoryInformation {
+        let fileManager = FileManager.default
+        
+        let fileType = try fileManager.type(at: fileURL)
+        guard fileType == .typeRegular else {
+            throw ParseError.unexpectedFileType(path: fileURL.path, expected: .typeRegular, actual: fileType)
+        }
+        
         guard let data = FileManager.default.contents(atPath: fileURL.path) else {
             throw ParseError.failedToReadFile(fileName: fileURL.lastPathComponent)
         }
@@ -76,6 +83,8 @@ extension StoryInfoParser {
         
         case failedToReadFile(fileName: String)
         
+        case unexpectedFileType(path: String, expected: FileAttributeType, actual: FileAttributeType)
+        
         public var description: String {
             switch self {
                 case .invalidTextEncoding:
@@ -88,6 +97,8 @@ extension StoryInfoParser {
                     return "Invalid number format: \(numberString)"
                 case .failedToReadFile(let fileName):
                     return "Failed to read \(fileName) file"
+                case let .unexpectedFileType(path, expected, actual):
+                    return "Expected the file '\(path)' to have file type '\(expected.rawValue)', but actually it has file type '\(actual.rawValue)'"
             }
         }
     }
