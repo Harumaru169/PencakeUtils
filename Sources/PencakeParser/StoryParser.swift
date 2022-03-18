@@ -37,15 +37,11 @@ public final class StoryParser<
             .appendingPathComponent("Story")
             .appendingPathExtension("txt")
         
-        guard let storyInfoData = fileManager.contents(atPath: storyInfoFileURL.path) else {
-            throw ParseError.failedToReadFile(fileName: storyInfoFileURL.lastPathComponent)
-        }
-        
         var information: StoryInformation
         var articles: [Article] = []
         
         do {
-            information = try await storyInfoParser.parse(from: storyInfoData)
+            information = try await storyInfoParser.parse(fileURL: storyInfoFileURL)
         } catch {
             throw ParseError.failedToParseStoryInfo(error: error)
         }
