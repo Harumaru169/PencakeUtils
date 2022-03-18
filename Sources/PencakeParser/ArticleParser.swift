@@ -28,7 +28,7 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
         }
         
         guard let match = Self.regex.findFirst(in: text) else {
-            throw ParseError.dataCorrupted
+            throw ParseError.invalidFormat
         }
         
         let title = match.group(at: 1)!
@@ -63,7 +63,7 @@ extension ArticleParser {
     public enum ParseError: Error, CustomStringConvertible {
         case invalidTextEncoding
         
-        case dataCorrupted
+        case invalidFormat
         
         case invalidDateFormat(dateString: String)
         
@@ -73,7 +73,7 @@ extension ArticleParser {
             switch self {
                 case .invalidTextEncoding:
                     return "Invalid text encoding"
-                case .dataCorrupted:
+                case .invalidFormat:
                     return "The content does not follow the format"
                 case .invalidDateFormat(let dateString):
                     return "Invalid date format: \(dateString)"
