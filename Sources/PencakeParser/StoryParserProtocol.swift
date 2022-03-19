@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  StoryParserProtocol.swift
-//  
-//
-//  Created by k.haruyama on 2022/01/18.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 import PencakeCore

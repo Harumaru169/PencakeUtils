@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  PencakeUtils.swift
-//  
-//
-//  Created by k.haruyama on 2022/03/15.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 // A module that re-exports the complete PencakeUtils's public API.
 @_exported import PencakeCore

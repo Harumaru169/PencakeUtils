@@ -1,9 +1,5 @@
+// The MIT License (MIT)
 //
-//  PencakeBuilder.swift
-//  
-//
-//  Created by k.haruyama on 2022/03/15.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 @_exported import PencakeCore

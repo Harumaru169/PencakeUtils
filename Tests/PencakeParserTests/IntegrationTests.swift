@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  IntegrationTests.swift
-//  
-//
-//  Created by k.haruyama on 2022/03/16.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import XCTest
 @testable import PencakeParser

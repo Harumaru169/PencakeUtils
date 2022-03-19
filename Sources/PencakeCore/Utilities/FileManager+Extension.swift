@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  FileManager+Extension.swift
-//  
-//
-//  Created by k.haruyama on 2022/03/15.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 

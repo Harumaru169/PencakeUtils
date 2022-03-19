@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  NewlineReplacerTests.swift
-//  
-//
-//  Created by k.haruyama on 2022/01/28.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import XCTest
 @testable import PencakeParser

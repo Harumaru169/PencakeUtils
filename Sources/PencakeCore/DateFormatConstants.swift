@@ -1,9 +1,6 @@
+// The MIT License (MIT)
 //
-//  DateFormatConstants.swift
-//  
-//
-//  Created by 春山 恒誠 on 2022/03/17.
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 

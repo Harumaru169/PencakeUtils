@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  StoryParserTests.swift
-//  
-//
-//  Created by k.haruyama on 2022/01/19.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import XCTest
 @testable import PencakeParser

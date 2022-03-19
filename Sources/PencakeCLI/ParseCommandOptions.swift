@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  ParseCommandOptions.swift
-//  
-//
-//  Created by k.haruyama on 2022/01/30.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 import PencakeParser

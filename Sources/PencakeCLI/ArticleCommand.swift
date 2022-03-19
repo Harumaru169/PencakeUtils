@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  ArticleCommand.swift
-//  pencake_parser
-//
-//  Created by k.haruyama on 2021/12/22.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 import PencakeParser

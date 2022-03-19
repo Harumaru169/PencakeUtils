@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  PhotosLoaderProtocol.swift
-//  
-//
-//  Created by k.haruyama on 2022/02/19.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 import PencakeCore

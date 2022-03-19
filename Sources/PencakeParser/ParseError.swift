@@ -1,9 +1,6 @@
+// The MIT License (MIT)
 //
-//  ParseError.swift
-//  
-//
-//  Created by 春山 恒誠 on 2022/03/18.
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 import PencakeCore

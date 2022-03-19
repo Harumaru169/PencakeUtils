@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  File.swift
-//  
-//
-//  Created by k.haruyama on 2022/01/19.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 struct PreparationError: Error, CustomStringConvertible {
     var description: String

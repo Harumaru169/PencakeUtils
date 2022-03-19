@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  Story.swift
-//  
-//
-//  Created by k.haruyama on 2022/02/19.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 

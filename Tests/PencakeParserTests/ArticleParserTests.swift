@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  ArticleParserTests.swift
-//  
-//
-//  Created by k.haruyama on 2022/01/07.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import XCTest
 @testable import PencakeParser

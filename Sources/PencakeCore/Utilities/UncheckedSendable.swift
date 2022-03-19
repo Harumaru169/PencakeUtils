@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  UncheckedSendable.swift
-//  
-//
-//  Created by k.haruyama on 2022/01/31.
-//  
-//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import Foundation
 

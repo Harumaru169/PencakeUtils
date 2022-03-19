@@ -1,5 +1,8 @@
 // swift-tools-version:5.5
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+//
+// The MIT License (MIT)
+//
+// Copyright (c) 2022 Kosei Haruyama.
 
 import PackageDescription
 
