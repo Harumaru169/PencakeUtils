@@ -79,11 +79,15 @@ let package = Package(
         //MARK: - Test Targets
         .testTarget(
             name: "PencakeParserTests",
-            dependencies: ["PencakeParser"]
+            dependencies: ["PencakeParser", "SampleGenerator"]
         ),
         .testTarget(
             name: "PencakeBuilderTests",
-            dependencies: ["PencakeBuilder"]
+            dependencies: ["PencakeBuilder", "SampleGenerator"]
+        ),
+        .target(
+            name: "SampleGenerator",
+            dependencies: ["PencakeCore"]
         )
     ]
 )
