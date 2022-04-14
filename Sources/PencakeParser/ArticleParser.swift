@@ -17,7 +17,7 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
     }
     
     private static var regex: Regex {
-        "(.*?)(\n{2}|(?:\r\n){2})(.*?)\\2([\\s\\S]*)".r!
+        "(.*?)(\(Newline.regexMatchingAnyNewline)){2}(.*?)\\2{2}([\\s\\S]*)".r!
     }
     
     public func parse(from data: Data, options: ParseOptions) async throws -> Article {

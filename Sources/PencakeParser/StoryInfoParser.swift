@@ -14,8 +14,8 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
     private static let dateFormatter = DateFormatConstants.formatterForStoryInfo()
     
     private static let regex = try! Regex(
-        pattern: "# Title(\n|\r\n)(.*)\\1{2}# Subtitle\\1(.*)\\1{2}# Created at\\1(.*)\\1{2}# Exported at\\1(.*)\\1{2}# Article count\\1([0-9]*)\\1{2}# Articles\\1([\\s\\S]*)\\1",
-        groupNames: "lineBreak", "title", "subtitle", "createdAt", "exportedAt", "articleCount", "articles"
+        pattern: "# Title(\(Newline.regexMatchingAnyNewline))(.*)\\1{2}# Subtitle\\1(.*)\\1{2}# Created at\\1(.*)\\1{2}# Exported at\\1(.*)\\1{2}# Article count\\1([0-9]*)\\1{2}# Articles\\1([\\s\\S]*)\\1",
+        groupNames: "newline", "title", "subtitle", "createdAt", "exportedAt", "articleCount", "articles"
     )
     
     public func parse(from data: Data) async throws -> StoryInformation {
