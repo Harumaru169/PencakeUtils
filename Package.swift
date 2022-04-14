@@ -26,6 +26,10 @@ let package = Package(
             name: "PencakeBuilder",
             targets: ["PencakeBuilder"]
         ),
+        .library(
+            name: "PencakeVisitor",
+            targets: ["PencakeVisitor"]
+        ),
         .executable(
             name: "pencake",
             targets: ["PencakeCLI"]
@@ -78,7 +82,7 @@ let package = Package(
         ),
         .target(
             name: "PencakeUtils",
-            dependencies: ["PencakeCore", "PencakeParser", "PencakeBuilder"]
+            dependencies: ["PencakeCore", "PencakeParser", "PencakeBuilder", "PencakeVisitor"]
         ),
         //MARK: - Test Targets
         .testTarget(
