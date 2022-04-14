@@ -64,6 +64,10 @@ let package = Package(
                 .product(name: "ZIPFoundation", package: "ZIPFoundation")
             ]
         ),
+        .target(
+            name: "PencakeVisitor",
+            dependencies: ["PencakeCore"]
+        ),
         .executableTarget(
             name: "PencakeCLI",
             dependencies: [
