@@ -7,11 +7,20 @@
 import Foundation
 import PencakeCore
 
+/// An object that visits `PencakeComponent`s and returns a result.
 public protocol PencakeVisitor {
     associatedtype Result
     
+    
+    /// Visit a `PencakeComponent`.
+    /// - Parameter component: The `PencakeComponent` this visitor should visit.
+    /// - Returns: The result of the visit.
     mutating func visit(_ component: PencakeComponent) -> Result
     
+    
+    /// A default implementation to use when a visitor method isn't implemented for a particular component.
+    /// - Parameter component: The component this visitor should visit.
+    /// - Returns: The result of the visit.
     mutating func defaultVisit(_ component: PencakeComponent) -> Result
     
     mutating func visitArticle(_ article: Article) -> Result
@@ -21,7 +30,7 @@ public protocol PencakeVisitor {
     mutating func visitPhoto(_ photo: Photo) -> Result
     
     mutating func visitStory(_ story: Story) -> Result
-
+    
 }
 
 extension PencakeVisitor {

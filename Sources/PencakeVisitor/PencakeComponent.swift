@@ -7,7 +7,11 @@
 import Foundation
 import PencakeCore
 
+/// A component of PenCake data.
 public protocol PencakeComponent {
+    /// Accept a `PencakeVisitor` and call the specific visitation method for this element.
+    /// - Parameter visitor: The `PencakeVisitor` visiting the component.
+    /// - Returns: The result of the visit.
     func accept<V: PencakeVisitor>(_ visitor: inout V) -> V.Result
 }
 
