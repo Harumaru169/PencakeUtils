@@ -8,7 +8,7 @@ import Foundation
 import PencakeCore
 
 public protocol ArticleParserProtocol: Decodable, Sendable {
-    func parse(from: Data, options: ParseOptions) async throws -> Article
+    func parse(from: Data, options: ParseOptions) throws -> Article
     
-    func parse(fileURL: URL, options: ParseOptions) async throws -> Article
+    func parse(fileURL: URL, options: ParseOptions) throws -> Article
 }

@@ -18,7 +18,7 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
         groupNames: "newline", "title", "subtitle", "createdAt", "exportedAt", "articleCount", "articles"
     )
     
-    public func parse(from data: Data) async throws -> StoryInformation {
+    public func parse(from data: Data) throws -> StoryInformation {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ParseError.invalidTextEncoding
         }
@@ -49,7 +49,7 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
         )
     }
     
-    public func parse(fileURL: URL) async throws -> StoryInformation {
+    public func parse(fileURL: URL) throws -> StoryInformation {
         let fileManager = FileManager.default
         
         let fileType = try fileManager.type(at: fileURL)
@@ -61,6 +61,6 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
             throw ParseError.failedToReadFile(path: fileURL.path)
         }
         
-        return try await parse(from: data)
+        return try parse(from: data)
     }
 }

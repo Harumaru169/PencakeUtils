@@ -89,21 +89,21 @@ class StoryParserTests: XCTestCase {
 
 extension StoryParserTests {
     final class StoryInfoParserMock: StoryInfoParserProtocol {
-        func parse(from: Data) async throws -> StoryInformation {
+        func parse(from: Data) throws -> StoryInformation {
             return Constants.storyInfo
         }
         
-        func parse(fileURL: URL) async throws -> StoryInformation {
+        func parse(fileURL: URL) throws -> StoryInformation {
             return Constants.storyInfo
         }
     }
     
     final class ArticleParserMock: ArticleParserProtocol {
-        func parse(from: Data, options: ParseOptions) async throws -> Article {
+        func parse(from: Data, options: ParseOptions) throws -> Article {
             return Constants.article
         }
         
-        func parse(fileURL: URL, options: ParseOptions) async throws -> Article {
+        func parse(fileURL: URL, options: ParseOptions) throws -> Article {
             return Constants.article
         }
     }

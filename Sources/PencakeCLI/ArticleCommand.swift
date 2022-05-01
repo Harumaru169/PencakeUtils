@@ -31,7 +31,7 @@ struct ArticleCommand: AsyncParsableCommand {
     func run() async throws {
         let options = commandOptions.parseOptions
         
-        let article = try await ArticleParser().parse(fileURL: URL(fileURLWithPath: path), options: options)
+        let article = try ArticleParser().parse(fileURL: URL(fileURLWithPath: path), options: options)
         
         let jsonEncoder = JSONEncoder()
         if commandOptions.isFormatPrettyPrinted {

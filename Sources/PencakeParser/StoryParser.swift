@@ -39,7 +39,7 @@ public final class StoryParser<
         var articles: [Article] = []
         
         do {
-            information = try await storyInfoParser.parse(fileURL: storyInfoFileURL)
+            information = try storyInfoParser.parse(fileURL: storyInfoFileURL)
         } catch {
             throw ParseError.failedToParseStoryInfo(error: error)
         }
@@ -66,7 +66,7 @@ public final class StoryParser<
                     }
                     
                     do {
-                        var article = try await self.articleParser.parse(from: articleData, options: options)
+                        var article = try self.articleParser.parse(from: articleData, options: options)
                         if photosDirectoryExists {
                             article.photos = try await self.photosLoader.load(from: photosDirectoryURL, articleNumber: index)
                         }

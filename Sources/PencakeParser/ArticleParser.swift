@@ -20,7 +20,7 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
         "(.*?)(\(Newline.regexMatchingAnyNewline)){2}(.*?)\\2{2}([\\s\\S]*)".r!
     }
     
-    public func parse(from data: Data, options: ParseOptions) async throws -> Article {
+    public func parse(from data: Data, options: ParseOptions) throws -> Article {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ParseError.invalidTextEncoding
         }
@@ -48,12 +48,12 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
         return Article(title: title, editDate: editDate, body: body)
     }
     
-    public func parse(fileURL: URL, options: ParseOptions) async throws -> Article {
+    public func parse(fileURL: URL, options: ParseOptions) throws -> Article {
         guard let data = FileManager.default.contents(atPath: fileURL.path) else {
             throw ParseError.failedToReadFile(path: fileURL.path)
         }
         
-        return try await parse(from: data, options: options)
+        return try parse(from: data, options: options)
     }
 }
 

@@ -30,7 +30,7 @@ class StoryInfoParserTests: XCTestCase {
         
         XCTAssertTrue(writingResult, "Failed to write a file to the disk")
         
-        let storyInfo = try await storyInfoParser.parse(fileURL: fileURL)
+        let storyInfo = try storyInfoParser.parse(fileURL: fileURL)
         
         XCTAssertEqual(storyInfo, Self.testStoryInfo)
         XCTAssertEqual(storyInfo.articleCount, Self.testStoryInfo.articleCount)
@@ -41,7 +41,7 @@ class StoryInfoParserTests: XCTestCase {
         
         let storyInfoData = Self.storyInfoString.data(using: .utf8)!
         
-        let storyInfo = try await storyInfoParser.parse(from: storyInfoData)
+        let storyInfo = try storyInfoParser.parse(from: storyInfoData)
         
         XCTAssertEqual(storyInfo, Self.testStoryInfo)
         XCTAssertEqual(storyInfo.articleCount, Self.testStoryInfo.articleCount)
