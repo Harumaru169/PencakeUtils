@@ -7,7 +7,7 @@
 import XCTest
 @testable import PencakeParser
 
-class PhotosLoaderTests: XCTestCase {
+class ParallelPhotosLoaderTests: XCTestCase {
     var directoryURL: URL?
     let fileManager = FileManager.default
     
@@ -61,7 +61,7 @@ class PhotosLoaderTests: XCTestCase {
     }
 }
 
-extension PhotosLoaderTests {
+extension ParallelPhotosLoaderTests {
     enum Constants {
         static let data = "photo data".data(using: .utf8)!
         

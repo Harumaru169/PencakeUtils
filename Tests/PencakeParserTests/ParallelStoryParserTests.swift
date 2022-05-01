@@ -8,7 +8,7 @@ import XCTest
 @testable import PencakeParser
 import ZIPFoundation
 
-class StoryParserTests: XCTestCase {
+class ParallelStoryParserTests: XCTestCase {
     var directoryURL: URL?
     
     override func setUp() async throws {
@@ -87,7 +87,7 @@ class StoryParserTests: XCTestCase {
     }
 }
 
-extension StoryParserTests {
+extension ParallelStoryParserTests {
     final class StoryInfoParserMock: StoryInfoParserProtocol {
         func parse(from: Data) throws -> StoryInformation {
             return Constants.storyInfo
@@ -115,7 +115,7 @@ extension StoryParserTests {
     }
 }
 
-extension StoryParserTests {
+extension ParallelStoryParserTests {
     enum Constants {
         static let date = Date(timeIntervalSince1970: 0)
         
