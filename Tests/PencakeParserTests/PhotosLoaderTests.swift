@@ -27,7 +27,7 @@ class PhotosLoaderTests: XCTestCase {
         let photosDirectoryURL = directoryURL!.appendingPathComponent("Photos", isDirectory: true)
         try Constants.photosDirectoryFileWrapper.write(to: photosDirectoryURL, originalContentsURL: nil)
         
-        let photosLoader = PhotosLoader()
+        let photosLoader = ParallelPhotosLoader()
         let photos = try await photosLoader.load(from: photosDirectoryURL, articleNumber: nil)
         
         XCTAssertEqual(
@@ -45,7 +45,7 @@ class PhotosLoaderTests: XCTestCase {
         let photosDirectoryURL = directoryURL!.appendingPathComponent("Photos", isDirectory: true)
         try Constants.photosDirectoryFileWrapper.write(to: photosDirectoryURL, originalContentsURL: nil)
         
-        let photosLoader = PhotosLoader()
+        let photosLoader = ParallelPhotosLoader()
         let photos = try await photosLoader.load(from: photosDirectoryURL, articleNumber: 2)
         
         let expectedPhotos = Array(repeating: Constants.regularPhoto, count: 3) + [Constants.trimmedCoverPhoto]

@@ -108,7 +108,7 @@ extension StoryParserTests {
         }
     }
     
-    final class PhotosLoaderMock: PhotosLoaderProtocol {
+    final class PhotosLoaderMock: ParallelPhotosLoaderProtocol {
         func load(from: URL, articleNumber: Int?) async throws -> [Photo] {
             return []
         }

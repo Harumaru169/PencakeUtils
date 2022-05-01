@@ -11,7 +11,7 @@ import ZIPFoundation
 public final class StoryParser<
     ArticleParserType: ArticleParserProtocol,
     StoryInfoParserType: StoryInfoParserProtocol,
-    PhotosLoaderType: PhotosLoaderProtocol
+    PhotosLoaderType: ParallelPhotosLoaderProtocol
 >: StoryParserProtocol {
     private let articleParser: ArticleParserType
     private let storyInfoParser: StoryInfoParserType
@@ -122,7 +122,7 @@ public final class StoryParser<
 
 extension StoryParser where ArticleParserType == ArticleParser<NewlineReplacer>,
                             StoryInfoParserType == StoryInfoParser,
-                            PhotosLoaderType == PhotosLoader {
+                            PhotosLoaderType == ParallelPhotosLoader {
     public convenience init() {
         self.init(articleParser: .init(), storyInfoParser: .init(), photosLoader: .init())
     }
