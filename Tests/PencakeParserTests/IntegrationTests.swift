@@ -22,7 +22,7 @@ class IntegrationTests: XCTestCase {
         let story = try writeAndGenerateStory(destinationURL: directoryURL, includePhotos: true, inZipFormat: false)
         
         do {
-            let storyParser = StoryParser()
+            let storyParser = ParallelStoryParser()
             let parseOptions = ParseOptions(language: .japanese, newline: .lf)
             var parsedStory = try await storyParser.parse(directoryURL: directoryURL, options: parseOptions)
             parsedStory.articles.sort { $0.title < $1.title }
@@ -44,7 +44,7 @@ class IntegrationTests: XCTestCase {
         let story = try writeAndGenerateStory(destinationURL: directoryURL, includePhotos: false, inZipFormat: false)
         
         do {
-            let storyParser = StoryParser()
+            let storyParser = ParallelStoryParser()
             let parseOptions = ParseOptions(language: .japanese, newline: .lf)
             var parsedStory = try await storyParser.parse(directoryURL: directoryURL, options: parseOptions)
             parsedStory.articles.sort { $0.title < $1.title }
@@ -66,7 +66,7 @@ class IntegrationTests: XCTestCase {
         let story = try writeAndGenerateStory(destinationURL: zipFileURL, includePhotos: true, inZipFormat: true)
         
         do {
-            let storyParser = StoryParser()
+            let storyParser = ParallelStoryParser()
             let parseOptions = ParseOptions(language: .japanese, newline: .lf)
             var parsedStory = try await storyParser.parse(zipFileURL: zipFileURL, options: parseOptions)
             parsedStory.articles.sort { $0.title < $1.title }
@@ -88,7 +88,7 @@ class IntegrationTests: XCTestCase {
         let story = try writeAndGenerateStory(destinationURL: zipFileURL, includePhotos: false, inZipFormat: true)
         
         do {
-            let storyParser = StoryParser()
+            let storyParser = ParallelStoryParser()
             let parseOptions = ParseOptions(language: .japanese, newline: .lf)
             var parsedStory = try await storyParser.parse(zipFileURL: zipFileURL, options: parseOptions)
             parsedStory.articles.sort { $0.title < $1.title }

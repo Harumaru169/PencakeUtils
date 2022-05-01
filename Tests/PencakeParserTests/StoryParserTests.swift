@@ -24,7 +24,7 @@ class StoryParserTests: XCTestCase {
     }
     
     func testParsingFromURL() async throws {
-        let storyParser = StoryParser(
+        let storyParser = ParallelStoryParser(
             articleParser: ArticleParserMock(),
             storyInfoParser: StoryInfoParserMock(),
             photosLoader: PhotosLoaderMock()
@@ -72,7 +72,7 @@ class StoryParserTests: XCTestCase {
         }
         
         do {
-            let storyParser = StoryParser(
+            let storyParser = ParallelStoryParser(
                 articleParser: ArticleParserMock(),
                 storyInfoParser: StoryInfoParserMock(),
                 photosLoader: PhotosLoaderMock()

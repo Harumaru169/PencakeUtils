@@ -8,11 +8,11 @@ import Foundation
 import PencakeCore
 import ZIPFoundation
 
-public final class StoryParser<
+public final class ParallelStoryParser<
     ArticleParserType: ArticleParserProtocol,
     StoryInfoParserType: StoryInfoParserProtocol,
     PhotosLoaderType: ParallelPhotosLoaderProtocol
->: StoryParserProtocol {
+>: ParallelStoryParserProtocol {
     private let articleParser: ArticleParserType
     private let storyInfoParser: StoryInfoParserType
     private let photosLoader: PhotosLoaderType
@@ -120,7 +120,7 @@ public final class StoryParser<
     }
 }
 
-extension StoryParser where ArticleParserType == ArticleParser<NewlineReplacer>,
+extension ParallelStoryParser where ArticleParserType == ArticleParser<NewlineReplacer>,
                             StoryInfoParserType == StoryInfoParser,
                             PhotosLoaderType == ParallelPhotosLoader {
     public convenience init() {

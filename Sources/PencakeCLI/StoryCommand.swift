@@ -55,7 +55,7 @@ struct StoryCommand: AsyncParsableCommand {
         let fileManager = FileManager.default
         let options = commandOptions.parseOptions
         var story: Story
-        let storyParser = StoryParser()
+        let storyParser = ParallelStoryParser()
         let itemFileType = try fileManager.type(at: itemURL)
         
         if itemFileType == .typeDirectory {
