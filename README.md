@@ -52,6 +52,6 @@ Download source code and run `make install` in the project directory.
 via SwiftPM:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Harumaru169/PencakeUtils", from: "0.6.0")
+    .package(url: "https://github.com/Harumaru169/PencakeUtils", from: "0.7.0")
 ]
 ```

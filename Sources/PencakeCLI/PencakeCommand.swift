@@ -12,7 +12,7 @@ struct PencakeCommand: AsyncParsableCommand {
     static let configuration: CommandConfiguration = .init(
         commandName: "pencake",
         abstract: "Pencake Utilities",
-        version: "Version 0.6.1\nCopyright (c) 2022 Kosei Haruyama.",
+        version: "Version 0.7.0\nCopyright (c) 2022 Kosei Haruyama.",
         subcommands: [ArticleCommand.self, StoryCommand.self],
         defaultSubcommand: StoryCommand.self
     )
