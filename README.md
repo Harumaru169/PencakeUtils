@@ -30,7 +30,7 @@ import PencakeParser
 
 let storyURL = URL(fileURLWithPath: "path_to_story_directory")
 
-let storyParser = StoryParser()
+let storyParser = ParallelStoryParser()
 
 let options = ParseOptions(language: .english, newline: .lf)
 
