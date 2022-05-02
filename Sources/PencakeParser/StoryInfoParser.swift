@@ -18,7 +18,7 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
         groupNames: "newline", "title", "subtitle", "createdAt", "exportedAt", "articleCount", "articles"
     )
     
-    public func parse(from data: Data) throws -> StoryInformation {
+    public func parse(from data: Data) throws -> StoryInfo {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ParseError.invalidTextEncoding
         }
@@ -40,7 +40,7 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
         let articleCountString = match.group(named: "articleCount")!
         let articleCount = Int(articleCountString)!
         
-        return StoryInformation(
+        return StoryInfo(
             title: match.group(named: "title")!,
             subtitle: match.group(named: "subtitle")!,
             createdDate: createdDate,
@@ -49,7 +49,7 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
         )
     }
     
-    public func parse(fileURL: URL) throws -> StoryInformation {
+    public func parse(fileURL: URL) throws -> StoryInfo {
         let fileManager = FileManager.default
         
         let fileType = try fileManager.type(at: fileURL)

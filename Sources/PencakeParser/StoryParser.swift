@@ -35,10 +35,10 @@ public final class StoryParser<
             .appendingPathComponent("Story")
             .appendingPathExtension("txt")
         
-        var information: StoryInformation
+        var storyInfo: StoryInfo
         
         do {
-            information = try storyInfoParser.parse(fileURL: storyInfoFileURL)
+            storyInfo = try storyInfoParser.parse(fileURL: storyInfoFileURL)
         } catch {
             throw ParseError.failedToParseStoryInfo(error: error)
         }
@@ -46,7 +46,7 @@ public final class StoryParser<
         let photosDirectoryURL = directoryURL.appendingPathComponent("Photos", isDirectory: true)
         let photosDirectoryExists = fileManager.fileExists(atPath: photosDirectoryURL.path)
         
-        let articles: [Article] = try (1...information.articleCount).map { index throws -> Article in
+        let articles: [Article] = try (1...storyInfo.articleCount).map { index throws -> Article in
             let articleFileName = "Article_" + String(format: "%03d", index)
             
             let articleFileURL = directoryURL
@@ -73,9 +73,9 @@ public final class StoryParser<
             }
         }
         
-        guard information.articleCount == articles.count else { fatalError("Inconsistent article count") }
+        guard storyInfo.articleCount == articles.count else { fatalError("Inconsistent article count") }
         
-        return Story(information: information, articles: articles)
+        return Story(storyInfo: storyInfo, articles: articles)
     }
     
     

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct StoryInformation: Equatable {
+public struct StoryInfo: Equatable {
     public var title: String
     
     public var subtitle: String
@@ -27,12 +27,12 @@ public struct StoryInformation: Equatable {
 }
 
 extension Story {
-    // 'information.articleCount' will be ignored.
-    public init(information: StoryInformation, articles: [Article]) {
-        self.title = information.title
-        self.subtitle = information.subtitle
-        self.createdDate = information.createdDate
-        self.exportedDate = information.exportedDate
+    // 'storyInfo.articleCount' will be ignored.
+    public init(storyInfo: StoryInfo, articles: [Article]) {
+        self.title = storyInfo.title
+        self.subtitle = storyInfo.subtitle
+        self.createdDate = storyInfo.createdDate
+        self.exportedDate = storyInfo.exportedDate
         self.articles = articles
     }
 }

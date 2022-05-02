@@ -145,17 +145,17 @@ extension IntegrationTests {
             let writingResult = fileManager.createFile(atPath: destinationURL.path, contents: archive.data, attributes: nil)
             guard writingResult == true else { fatalError() }
             
-            return .init(information: Constants.storyInfo, articles: articles)
+            return .init(storyInfo: Constants.storyInfo, articles: articles)
         } else {
             try storyDirectoryWrapper.write(to: destinationURL, originalContentsURL: nil)
-            return .init(information: Constants.storyInfo, articles: articles)
+            return .init(storyInfo: Constants.storyInfo, articles: articles)
         }
     }
 }
 
 extension IntegrationTests {
     enum Constants {
-        static var storyInfo: StoryInformation {
+        static var storyInfo: StoryInfo {
             .init(
                 title: "Sample Story",
                 subtitle: "Quotes from the greats.",

@@ -51,5 +51,5 @@ class StoryInfoParserTests: XCTestCase {
 extension StoryInfoParserTests {
     static let storyInfoString = "# Title\nサンプルストーリー\n\n# Subtitle\n偉人たちの名言\n\n# Created at\n2022/1/19 16:28:10\n\n# Exported at\n2022/1/19 16:44:27\n\n# Article count\n3\n\n# Articles\n001 - サンプル記事 No.1\n002 - サンプル記事 No.2\n003 - サンプル記事 No.3\n"
     
-    static let testStoryInfo: StoryInformation = .init(title: "サンプルストーリー", subtitle: "偉人たちの名言", createdDate: try! .init("2022-01-19T07:28:10Z", strategy: .iso8601), exportedDate: try! .init("2022-01-19T07:44:27Z", strategy: .iso8601), articleCount: 3)
+    static let testStoryInfo: StoryInfo = .init(title: "サンプルストーリー", subtitle: "偉人たちの名言", createdDate: try! .init("2022-01-19T07:28:10Z", strategy: .iso8601), exportedDate: try! .init("2022-01-19T07:44:27Z", strategy: .iso8601), articleCount: 3)
 }

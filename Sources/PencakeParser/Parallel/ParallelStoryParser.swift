@@ -35,11 +35,11 @@ public final class ParallelStoryParser<
             .appendingPathComponent("Story")
             .appendingPathExtension("txt")
         
-        var information: StoryInformation
+        var storyInfo: StoryInfo
         var articles: [Article] = []
         
         do {
-            information = try storyInfoParser.parse(fileURL: storyInfoFileURL)
+            storyInfo = try storyInfoParser.parse(fileURL: storyInfoFileURL)
         } catch {
             throw ParseError.failedToParseStoryInfo(error: error)
         }
@@ -48,7 +48,7 @@ public final class ParallelStoryParser<
         let photosDirectoryExists = fileManager.fileExists(atPath: photosDirectoryURL.path)
         
         try await withThrowingTaskGroup(of: Article.self) { group in
-            for index in 1...information.articleCount {
+            for index in 1...storyInfo.articleCount {
                 _ = group.addTaskUnlessCancelled { [self] in
                     let articleFileName = "Article_" + String(format: "%03d", index)
                     
@@ -82,9 +82,9 @@ public final class ParallelStoryParser<
             }
         }
         
-        guard information.articleCount == articles.count else { fatalError("Inconsistent article count") }
+        guard storyInfo.articleCount == articles.count else { fatalError("Inconsistent article count") }
         
-        return Story(information: information, articles: articles)
+        return Story(storyInfo: storyInfo, articles: articles)
     }
     
     
