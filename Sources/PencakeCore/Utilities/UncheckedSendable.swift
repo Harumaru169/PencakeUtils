@@ -11,3 +11,5 @@ extension Date: @unchecked Sendable {}
 extension Data: @unchecked Sendable {}
 
 extension URL: @unchecked Sendable {}
+
+extension FileManager: @unchecked Sendable {}
