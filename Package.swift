@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.7
 //
 // The MIT License (MIT)
 //
@@ -10,8 +10,8 @@ import PackageDescription
 let package = Package(
     name: "PencakeUtils",
     platforms: [
-        .macOS(.v12),
-        .iOS(.v15)
+        .macOS(.v13),
+        .iOS(.v16)
     ],
     products: [
         .library(
