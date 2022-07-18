@@ -7,7 +7,8 @@
 import Foundation
 import PencakeCore
 
-    // When articleNumber is specified, loads the corresponding photo; when it is not specified, loads all photos.
-    func load(from: URL, articleNumber: Int?) throws -> [Photo]
 public protocol PhotosLoaderProtocol {
+    func loadAllPhotos(in directoryURL: URL) throws -> [Photo]
+    
+    func loadPhotos(ofArticleNumber specifiedArticleNumber: Int, in directoryURL: URL) throws -> [Photo]
 }
