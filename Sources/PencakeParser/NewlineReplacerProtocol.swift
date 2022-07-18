@@ -7,7 +7,7 @@
 import Foundation
 import PencakeCore
 
-public protocol NewlineReplacerProtocol: Decodable, Sendable {
+public protocol NewlineReplacerProtocol {
     func replaceAll(in: inout String, with: Newline)
     
     func replacingAll(in: String, with: Newline) -> String
