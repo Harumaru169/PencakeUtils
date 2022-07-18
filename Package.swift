@@ -33,10 +33,6 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/crossroadlabs/Regex",
-            from: "1.2.0"
-        ),
-        .package(
             url: "https://github.com/apple/swift-argument-parser",
             from: "1.1.1"
         ),
@@ -53,7 +49,6 @@ let package = Package(
             name: "PencakeParser",
             dependencies: [
                 "PencakeCore",
-                .product(name: "Regex", package: "Regex"),
                 .product(name: "ZIPFoundation", package: "ZIPFoundation")
             ]
         ),
