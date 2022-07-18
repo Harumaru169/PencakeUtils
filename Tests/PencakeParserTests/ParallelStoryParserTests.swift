@@ -109,7 +109,11 @@ extension ParallelStoryParserTests {
     }
     
     final class PhotosLoaderMock: ParallelPhotosLoaderProtocol {
-        func load(from: URL, articleNumber: Int?) async throws -> [Photo] {
+        func loadAllPhotos(in directoryURL: URL) async throws -> [PencakeCore.Photo] {
+            return []
+        }
+        
+        func loadPhotos(ofArticleNumber specifiedArticleNumber: Int, in directoryURL: URL) async throws -> [PencakeCore.Photo] {
             return []
         }
     }

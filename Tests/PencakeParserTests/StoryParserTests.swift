@@ -109,7 +109,11 @@ extension StoryParserTests {
     }
     
     final class PhotosLoaderMock: PhotosLoaderProtocol {
-        func load(from: URL, articleNumber: Int?) throws -> [Photo] {
+        func loadAllPhotos(in directoryURL: URL) throws -> [PencakeCore.Photo] {
+            return []
+        }
+        
+        func loadPhotos(ofArticleNumber specifiedArticleNumber: Int, in directoryURL: URL) throws -> [PencakeCore.Photo] {
             return []
         }
     }
