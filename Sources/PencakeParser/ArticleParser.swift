@@ -6,7 +6,7 @@
 
 import Foundation
 import PencakeCore
-import Regex
+import RegexBuilder
 
 public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: ArticleParserProtocol {
     
@@ -16,8 +16,29 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
         self.newlineReplacer = newlineReplacer
     }
     
-    private static var regex: Regex {
-        "(.*?)(\(Newline.regexMatchingAnyNewline)){2}(.*?)\\2{2}([\\s\\S]*)".r!
+    private let regex = Regex {
+        let newline = #/\r?\n/#
+        
+        Capture {
+            OneOrMore(.any)
+        }
+        
+        Repeat(newline, count: 2)
+        
+        Capture {
+            OneOrMore(.any)
+        }
+        
+        Repeat(newline, count: 2)
+        
+        Capture {
+            OneOrMore {
+                ChoiceOf {
+                    CharacterClass.any
+                    newline
+                }
+            }
+        }
     }
     
     public func parse(from data: Data, options: ParseOptions) throws -> Article {
@@ -25,27 +46,26 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
             throw ParseError.invalidTextEncoding
         }
         
-        guard let match = Self.regex.findFirst(in: text) else {
+        guard let match = text.firstMatch(of: regex) else {
             throw ParseError.invalidFormat
         }
         
-        let title = match.group(at: 1)!
+        let (_, title, editDateString, rawBody) = match.output
         
         let body: String
         if let newline = options.newline {
-            body = newlineReplacer.replacingAll(in: match.group(at: 4)!, with: newline)
+            body = newlineReplacer.replacingAll(in: String(rawBody), with: newline)
         } else {
-            body = match.group(at: 4)!
+            body = String(rawBody)
         }
         
-        let editDateString = match.group(at: 3)!
         let dateFormatter = DateFormatConstants.formatterForArticle(in: options.language)
-        guard let editDate = dateFormatter.date(from: editDateString)
+        guard let editDate = dateFormatter.date(from: String(editDateString))
         else {
-            throw ParseError.invalidDateFormat(dateString: editDateString)
+            throw ParseError.invalidDateFormat(dateString: String(editDateString))
         }
         
-        return Article(title: title, editDate: editDate, body: body)
+        return Article(title: String(title), editDate: editDate, body: body)
     }
     
     public func parse(fileURL: URL, options: ParseOptions) throws -> Article {

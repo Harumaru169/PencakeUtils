@@ -6,43 +6,76 @@
 
 import Foundation
 import PencakeCore
-import Regex
+import RegexBuilder
 
 public final class StoryInfoParser: StoryInfoParserProtocol {
     public init() {}
     
-    private static let dateFormatter = DateFormatConstants.formatterForStoryInfo()
-    
-    private static let regex = try! Regex(
-        pattern: "# Title(\(Newline.regexMatchingAnyNewline))(.*)\\1{2}# Subtitle\\1(.*)\\1{2}# Created at\\1(.*)\\1{2}# Exported at\\1(.*)\\1{2}# Article count\\1([0-9]*)\\1{2}# Articles\\1([\\s\\S]*)\\1",
-        groupNames: "newline", "title", "subtitle", "createdAt", "exportedAt", "articleCount", "articles"
-    )
+    private let regex: Regex = {
+        let newline = #/\r|\n|\r\n/#
+        let doubleNewline = Repeat(newline, count: 2)
+        let dateFormatter = DateFormatConstants.formatterForStoryInfo()
+        
+        return Regex {
+            "# Title"
+            newline
+            Capture { ZeroOrMore(.any) }
+            
+            doubleNewline
+            
+            "# Subtitle"
+            newline
+            Capture { ZeroOrMore(.any) }
+            
+            doubleNewline
+            
+            "# Created at"
+            newline
+            TryCapture { OneOrMore(.any) } transform: { (createdDateString: Substring) -> Date? in
+                dateFormatter.date(from: String(createdDateString))
+            }
+            
+            doubleNewline
+            
+            "# Exported at"
+            newline
+            TryCapture { OneOrMore(.any) } transform: { (exportedDateString: Substring) -> Date? in
+                dateFormatter.date(from: String(exportedDateString))
+            }
+            
+            doubleNewline
+            
+            "# Article count"
+            newline
+            Capture {
+                .localizedInteger
+            }
+            
+            doubleNewline
+            
+            "# Articles"
+            newline
+            ZeroOrMore {
+                #/[\s\S]/#
+            }
+            newline
+        }
+    }()
     
     public func parse(from data: Data) throws -> StoryInfo {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ParseError.invalidTextEncoding
         }
         
-        guard let match = Self.regex.findFirst(in: text) else {
+        guard let match = text.wholeMatch(of: regex) else {
             throw ParseError.invalidFormat
         }
         
-        let createdDateString = match.group(named: "createdAt")!
-        guard let createdDate = Self.dateFormatter.date(from: createdDateString) else {
-            throw ParseError.invalidDateFormat(dateString: createdDateString)
-        }
-        
-        let exportedDateString = match.group(named: "exportedAt")!
-        guard let exportedDate = Self.dateFormatter.date(from: exportedDateString) else {
-            throw ParseError.invalidDateFormat(dateString: exportedDateString)
-        }
-        
-        let articleCountString = match.group(named: "articleCount")!
-        let articleCount = Int(articleCountString)!
+        let (_, title, subtitle, createdDate, exportedDate, articleCount): (Substring, Substring, Substring, Date, Date, Int) = match.output
         
         return StoryInfo(
-            title: match.group(named: "title")!,
-            subtitle: match.group(named: "subtitle")!,
+            title: String(title),
+            subtitle: String(subtitle),
             createdDate: createdDate,
             exportedDate: exportedDate,
             articleCount: articleCount
