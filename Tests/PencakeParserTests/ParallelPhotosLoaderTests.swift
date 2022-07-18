@@ -28,7 +28,7 @@ class ParallelPhotosLoaderTests: XCTestCase {
         try Constants.photosDirectoryFileWrapper.write(to: photosDirectoryURL, originalContentsURL: nil)
         
         let photosLoader = ParallelPhotosLoader()
-        let photos = try await photosLoader.load(from: photosDirectoryURL, articleNumber: nil)
+        let photos = try await photosLoader.loadAllPhotos(in: photosDirectoryURL)
         
         XCTAssertEqual(
             photos.filter { $0.isTrimmedCoverPhoto },
@@ -46,7 +46,7 @@ class ParallelPhotosLoaderTests: XCTestCase {
         try Constants.photosDirectoryFileWrapper.write(to: photosDirectoryURL, originalContentsURL: nil)
         
         let photosLoader = ParallelPhotosLoader()
-        let photos = try await photosLoader.load(from: photosDirectoryURL, articleNumber: 2)
+        let photos = try await photosLoader.loadPhotos(ofArticleNumber: 2, in: photosDirectoryURL)
         
         let expectedPhotos = Array(repeating: Constants.regularPhoto, count: 3) + [Constants.trimmedCoverPhoto]
         

@@ -28,7 +28,7 @@ class PhotosLoaderTests: XCTestCase {
         try Constants.photosDirectoryFileWrapper.write(to: photosDirectoryURL, originalContentsURL: nil)
         
         let photosLoader = PhotosLoader()
-        let photos = try photosLoader.load(from: photosDirectoryURL, articleNumber: nil)
+        let photos = try photosLoader.loadAllPhotos(in: photosDirectoryURL)
         
         XCTAssertEqual(
             photos.filter { $0.isTrimmedCoverPhoto },
@@ -46,8 +46,7 @@ class PhotosLoaderTests: XCTestCase {
         try Constants.photosDirectoryFileWrapper.write(to: photosDirectoryURL, originalContentsURL: nil)
         
         let photosLoader = PhotosLoader()
-        let photos = try photosLoader.load(from: photosDirectoryURL, articleNumber: 2)
-        
+        let photos = try photosLoader.loadPhotos(ofArticleNumber: 2, in: photosDirectoryURL)
         let expectedPhotos = Array(repeating: Constants.regularPhoto, count: 3) + [Constants.trimmedCoverPhoto]
         
         XCTAssertEqual(
