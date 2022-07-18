@@ -68,7 +68,7 @@ public final class ParallelStoryParser<
                     do {
                         var article = try self.articleParser.parse(from: articleData, options: options)
                         if photosDirectoryExists {
-                            article.photos = try await self.photosLoader.load(from: photosDirectoryURL, articleNumber: index)
+                            article.photos = try await self.photosLoader.loadPhotos(ofArticleNumber: index, in: photosDirectoryURL)
                         }
                         return article
                     } catch {

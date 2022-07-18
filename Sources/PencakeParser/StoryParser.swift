@@ -65,7 +65,7 @@ public final class StoryParser<
             do {
                 var article = try self.articleParser.parse(from: articleData, options: options)
                 if photosDirectoryExists {
-                    article.photos = try self.photosLoader.load(from: photosDirectoryURL, articleNumber: index)
+                    article.photos = try self.photosLoader.loadPhotos(ofArticleNumber: index, in: photosDirectoryURL)
                 }
                 return article
             } catch {
