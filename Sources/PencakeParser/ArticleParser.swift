@@ -17,26 +17,23 @@ public final class ArticleParser<NewlineReplacerType: NewlineReplacerProtocol>: 
     }
     
     private let regex = Regex {
-        let newline = #/\r?\n/#
+        let newline = #/\n|\r\n/#
         
         Capture {
-            OneOrMore(.any)
+            OneOrMore(.anyNonNewline)
         }
         
         Repeat(newline, count: 2)
         
         Capture {
-            OneOrMore(.any)
+            OneOrMore(.anyNonNewline)
         }
         
         Repeat(newline, count: 2)
         
         Capture {
-            OneOrMore {
-                ChoiceOf {
-                    CharacterClass.any
-                    newline
-                }
+            ZeroOrMore {
+                CharacterClass.any
             }
         }
     }

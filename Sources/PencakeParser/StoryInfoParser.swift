@@ -47,8 +47,8 @@ public final class StoryInfoParser: StoryInfoParserProtocol {
             
             "# Article count"
             newline
-            Capture {
-                .localizedInteger
+            TryCapture { OneOrMore(.digit) } transform: {
+                Int($0, radix: 10)
             }
             
             doubleNewline
