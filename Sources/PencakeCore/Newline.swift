@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import RegexBuilder
 
 public enum Newline: String, RawRepresentable, CaseIterable, Codable, Sendable {
     case cr
@@ -44,5 +45,9 @@ extension Newline {
                     return "Carriage Return + Line Feed"
             }
         }
+    }
+    
+    public static var anyOfPencakeSupportedNewline: CharacterClass {
+        .anyOf("\r\n\n\r")
     }
 }
