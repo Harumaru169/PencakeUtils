@@ -23,8 +23,8 @@ let package = Package(
             targets: ["PencakeParser"]
         ),
         .library(
-            name: "PencakeBuilder",
-            targets: ["PencakeBuilder"]
+            name: "PencakeSerializer",
+            targets: ["PencakeSerializer"]
         ),
         .executable(
             name: "pencake",
@@ -53,7 +53,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "PencakeBuilder",
+            name: "PencakeSerializer",
             dependencies: [
                 "PencakeCore",
                 .product(name: "ZIPFoundation", package: "ZIPFoundation")
@@ -63,13 +63,13 @@ let package = Package(
             name: "PencakeCLI",
             dependencies: [
                 "PencakeParser",
-                "PencakeBuilder",
+                "PencakeSerializer",
                 .product(name:"ArgumentParser", package: "swift-argument-parser")
             ]
         ),
         .target(
             name: "PencakeUtils",
-            dependencies: ["PencakeCore", "PencakeParser", "PencakeBuilder"]
+            dependencies: ["PencakeCore", "PencakeParser", "PencakeSerializer"]
         ),
         //MARK: - Test Targets
         .testTarget(
@@ -77,8 +77,8 @@ let package = Package(
             dependencies: ["PencakeParser"]
         ),
         .testTarget(
-            name: "PencakeBuilderTests",
-            dependencies: ["PencakeBuilder"]
+            name: "PencakeSerializerTests",
+            dependencies: ["PencakeSerializer"]
         )
     ]
 )
