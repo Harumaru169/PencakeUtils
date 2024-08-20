@@ -36,7 +36,7 @@ public final class ParallelStoryParser<
             .appendingPathExtension("txt")
         
         var storyInfo: StoryInfo
-        var articles: [Article] = []
+        var results: [(Article, Int)] = []
         
         do {
             storyInfo = try storyInfoParser.parse(fileURL: storyInfoFileURL)
@@ -47,7 +47,7 @@ public final class ParallelStoryParser<
         let photosDirectoryURL = directoryURL.appendingPathComponent("Photos", isDirectory: true)
         let photosDirectoryExists = fileManager.fileExists(atPath: photosDirectoryURL.path)
         
-        try await withThrowingTaskGroup(of: Article.self) { group in
+        try await withThrowingTaskGroup(of: (Article, Int).self) { group in
             for index in 1...storyInfo.articleCount {
                 _ = group.addTaskUnlessCancelled { [self] in
                     let articleFileName = "Article_" + String(format: "%03d", index)
@@ -70,21 +70,25 @@ public final class ParallelStoryParser<
                         if photosDirectoryExists {
                             article.photos = try await self.photosLoader.loadPhotos(ofArticleNumber: index, in: photosDirectoryURL)
                         }
-                        return article
+                        return (article, index)
                     } catch {
                         throw ParseError.failedToParseArticle(path: articleFileURL.path, error: error)
                     }
                 }
             }
             
-            for try await article in group {
-                articles.append(article)
+            for try await result in group {
+                results.append(result)
+            }
+            
+            results.sort { result1, result2 in
+                result1.1 < result2.1
             }
         }
         
-        guard storyInfo.articleCount == articles.count else { fatalError("Inconsistent article count") }
+        guard storyInfo.articleCount == results.count else { fatalError("Inconsistent article count") }
         
-        return Story(storyInfo: storyInfo, articles: articles)
+        return Story(storyInfo: storyInfo, articles: results.map(\.0))
     }
     
     
