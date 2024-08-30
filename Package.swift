@@ -59,17 +59,25 @@ let package = Package(
                 .product(name: "ZIPFoundation", package: "ZIPFoundation")
             ]
         ),
+        .target(
+            name: "PencakeEPUBConverter",
+            dependencies: [
+                "PencakeParser",
+                .product(name: "ZIPFoundation", package: "ZIPFoundation")
+            ]
+        ),
         .executableTarget(
             name: "PencakeCLI",
             dependencies: [
                 "PencakeParser",
                 "PencakeSerializer",
+                "PencakeEPUBConverter",
                 .product(name:"ArgumentParser", package: "swift-argument-parser")
             ]
         ),
         .target(
             name: "PencakeUtils",
-            dependencies: ["PencakeCore", "PencakeParser", "PencakeSerializer"]
+            dependencies: ["PencakeCore", "PencakeParser", "PencakeSerializer", "PencakeEPUBConverter"]
         ),
         //MARK: - Test Targets
         .testTarget(
