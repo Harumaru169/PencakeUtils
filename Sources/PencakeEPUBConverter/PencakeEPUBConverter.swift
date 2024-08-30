@@ -13,11 +13,18 @@ public struct EPUBConverter {
     public struct Options {
         public var authorName: String
         public var isWrittenVertically: Bool
+        
+        public init(authorName: String, isWrittenVertically: Bool) {
+            self.authorName = authorName
+            self.isWrittenVertically = isWrittenVertically
+        }
     }
     
     public enum ConvertError: Error {
         case failedToCreateFile(path: String)
     }
+    
+    public init() {}
     
     public func write(story: Story, to destinationURL: URL, options: Options) throws {
         let mimetypeData = Templates.mimetype().data(using: .utf8)!
@@ -112,7 +119,7 @@ public struct EPUBConverter {
         let pageXHTMLDataGenerator = { (articleNumber: Int, article: PencakeCore.Article) -> Data in
             let imageSection: String = article.photos.enumerated().map { (photoIndex, photo) -> String in
                 return """
-        <img id="img-in-page" src="../Images/image\(articleNumber)-\(photoIndex+1).\(jpgTojpeg(photo.fileExtension))" alt="画像\(articleNumber)-\(photoIndex+1)"/>
+        <img src="../Images/image\(articleNumber)-\(photoIndex+1).\(jpgTojpeg(photo.fileExtension))" alt="画像\(articleNumber)-\(photoIndex+1)"/>
 
 """
             }
@@ -164,7 +171,7 @@ writing-mode: vertical-rl;
 }
 """)
 
-#img-in-page {
+#img-grid .img {
     aspect-ratio: 1;
     object-fit: cover;
 }
