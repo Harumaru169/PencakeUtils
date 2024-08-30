@@ -22,7 +22,7 @@ struct ParseCommandOptions: ParsableArguments {
     var language: Language = .english
     
     @Option(
-        name: [.short, .customLong("newline-code")],
+        name: [.customLong("newline-code")],
         help: "Newline code of output. If not specified, the same newline code as in the original file will be output.",
         completion: .list(Newline.allCases.map(\.rawValue)),
         transform: { string in
@@ -32,12 +32,6 @@ struct ParseCommandOptions: ParsableArguments {
             return result
         })
     var newline: Newline?
-    
-    @Flag(
-        name: [.customLong("pretty-printed"), .customShort("p")],
-        help: "Print the JSON contents in pretty printed style."
-    )
-    var isFormatPrettyPrinted = false
     
     var parseOptions: ParseOptions {
         .init(language: language, newline: newline)

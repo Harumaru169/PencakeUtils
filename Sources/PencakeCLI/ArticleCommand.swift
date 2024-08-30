@@ -28,13 +28,19 @@ struct ArticleCommand: AsyncParsableCommand {
     
     @OptionGroup var commandOptions: ParseCommandOptions
     
+    @Flag(
+        name: [.customLong("pretty-printed"), .customShort("p")],
+        help: "Print the JSON contents in pretty printed style."
+    )
+    var isFormatPrettyPrinted = false
+    
     func run() async throws {
         let options = commandOptions.parseOptions
         
         let article = try ArticleParser().parse(fileURL: URL(fileURLWithPath: path), options: options)
         
         let jsonEncoder = JSONEncoder()
-        if commandOptions.isFormatPrettyPrinted {
+        if self.isFormatPrettyPrinted {
             jsonEncoder.outputFormatting = .prettyPrinted
         }
         jsonEncoder.dateEncodingStrategy = .iso8601
